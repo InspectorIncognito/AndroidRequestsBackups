@@ -115,7 +115,6 @@ if [ ! -e "$MANAGE_PY" ]; then
 fi
 
 ## manage.py works well
-# /home/transapp/visualization/venv/bin/python
 python "$MANAGE_PY" 2>/dev/null 1>/dev/null
 if [ $? -ne 0 ]; then
 	echo "manage.py failed run.. maybe some dependencies are missing"
