@@ -62,6 +62,7 @@ fi
 
 cd "$TMP_BKP_FLDR"
 mkdir -p imgs
+touch imgs/not_empty_folder.txt
 
 while IFS='' read -r line || [[ -n "$line" ]]; do
 	IMAGE="$IMGS_FLDR"/"$line"
