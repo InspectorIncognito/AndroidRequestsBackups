@@ -37,3 +37,5 @@ if [ "$(ls -A imgs/)" ]; then
 else
     echo " - no images found"
 fi
+
+python "$SERVER_FLDR/transform.py" "$BACKUP_FILE_NOT_FULL"

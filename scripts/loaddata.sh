@@ -194,6 +194,7 @@ echo " - using oldest backup file: $oldest_not_used"
 
 
 echo " - marking as used: $BACKUP_FILE"
+BACKUP_FILE_NOT_FULL="${oldest_not_used:4}"
 BACKUP_FILE="$BACKUP_FOLDER/${oldest_not_used:4}"
 mv "$oldest_not_used" "$BACKUP_FILE"
 
