@@ -95,6 +95,18 @@ TMP_DB_BACKUP=database.tar.gz
 THIS_APP_FLDR="$SERVER_FLDR/AndroidRequestsBackups"
 IMGS_FLDR="$SERVER_FLDR/$IMGS_FLDR"
 
+MANAGE_PY="$SERVER_FLDR/manage.py"
+
+echo " - computed variables:"
+echo "  > MUTEX_FOLDER: $MUTEX_FOLDER"
+echo "  > BACKUP_FOLDER: $BACKUP_FOLDER"
+echo "  > TMP_DB_DUMP: $TMP_DB_DUMP"
+echo "  > TMP_IMG_BACKUP: $TMP_IMG_BACKUP"
+echo "  > TMP_DB_BACKUP: $TMP_DB_BACKUP"
+echo "  > THIS_APP_FLDR: $THIS_APP_FLDR"
+echo "  > IMGS_FLDR: $IMGS_FLDR"
+echo "  > MANAGE_PY: $MANAGE_PY"
+
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### CHECKS
@@ -109,7 +121,6 @@ if [ ! -d "$BACKUP_FOLDER" ]; then
 fi
 
 ## manage.py existence
-MANAGE_PY="$SERVER_FLDR/manage.py"
 if [ ! -e "$MANAGE_PY" ]; then
 	echo "MANAGE.PY file not found: $MANAGE_PY"
 	exit 1

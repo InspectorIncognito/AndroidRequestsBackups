@@ -145,6 +145,22 @@ export TMP_BKP_IMGS_FULL="$TMP_BKP_FLDR"/"$TMP_IMG_BACKUP"
 export TMP_BKP_FILE_FULL="$TMP_BKP_FLDR/$TMP_BKP_FILE"
 
 
+echo " - computed variables:"
+echo "  > TMP_BKP_FLDR: $TMP_BKP_FLDR"
+echo "  > REMOTE_BKP_FLDR: $REMOTE_BKP_FLDR"
+echo "  > TMP_IMG_BACKUP: $TMP_IMG_BACKUP"
+echo "  > TMP_DB_BACKUP: $TMP_DB_BACKUP"
+echo "  > TMP_BKP_FILE: $TMP_BKP_FILE"
+echo "  > REMOTE_USERHOST: $REMOTE_USERHOST"
+echo "  > SFTP_COMMANDS: $SFTP_COMMANDS"
+echo "  > SERVER_FLDR: $SERVER_FLDR"
+echo "  > IMGS_FLDR: $IMGS_FLDR"
+echo "  > TMP_BKP_DB_FULL: $TMP_BKP_DB_FULL"
+echo "  > TMP_BKP_IMGS_FULL: $TMP_BKP_IMGS_FULL"
+echo "  > TMP_BKP_FILE_FULL: $TMP_BKP_FILE_FULL"
+
+
+
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### CHECKS
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
