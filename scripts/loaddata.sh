@@ -13,6 +13,7 @@ fi
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### USER PARAMETERS
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+echo " - checking parameters:"
 SERVER_FLDR="$1"
 if [ -z "$SERVER_FLDR" ]; then
 	echo "This script must be called with the SERVER_FLDR parameter"
@@ -24,7 +25,7 @@ if [ ! -d "$SERVER_FLDR" ]; then
 	echo "SERVER_FLDR folder does not exists: $SERVER_FLDR"
 	exit 1
 fi
-echo "$SERVER_FLDR"
+echo "  > SERVER_FLDR: $SERVER_FLDR"
 
 BACKUP_FOLDER="$2"
 if [ -z "$BACKUP_FOLDER" ]; then
@@ -37,7 +38,7 @@ if [ ! -d "$BACKUP_FOLDER" ]; then
 	echo "Backup folder not found: $BACKUP_FOLDER"
 	exit 1
 fi
-echo "$BACKUP_FOLDER"
+echo "  > BACKUP_FOLDER: $BACKUP_FOLDER"
 
 IMGS_FLDR="$3"
 if [ -z "$IMGS_FLDR" ]; then
@@ -46,7 +47,7 @@ if [ -z "$IMGS_FLDR" ]; then
 	echo "e.g: media/reported_images"
 	exit 1
 fi
-echo "$IMGS_FLDR"
+echo "  > IMGS_FLDR: $IMGS_FLDR"
 
 DATABASE_NAME="$4"
 if [ -z "$DATABASE_NAME" ]; then
@@ -54,7 +55,7 @@ if [ -z "$DATABASE_NAME" ]; then
 	echo "DATABASE_NAME represents the database name, duh."
 	exit 1
 fi
-echo "$DATABASE_NAME"
+echo "  > DATABASE_NAME: $DATABASE_NAME"
 
 BKPS_LIFETIME="$5"
 if [ -z "$BKPS_LIFETIME" ]; then
@@ -63,7 +64,7 @@ if [ -z "$BKPS_LIFETIME" ]; then
 	echo "e.g.: 15"
 	exit 1
 fi
-echo "$BKPS_LIFETIME"
+echo "  > BKPS_LIFETIME: $BKPS_LIFETIME"
 
 BKP_TYPE="$6"
 if [ -z "$BKP_TYPE" ]; then
@@ -75,7 +76,7 @@ if [ "$BKP_TYPE" != "complete" ] && [ "$BKP_TYPE" != "partial" ] ; then
 	echo "INVALID TYPE: BKP_TYPE should be 'complete' or 'partial'"
 	exit 1
 fi
-echo "$BKP_TYPE"
+echo "  > BKP_TYPE: $BKP_TYPE"
 
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 

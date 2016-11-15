@@ -13,6 +13,7 @@ fi
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### USER PARAMETERS
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+echo " - checking parameters:"
 VIZ_APP_FLDR="$1"
 if [ -z "$VIZ_APP_FLDR" ]; then
 	echo "This script must be called with the VIZ_APP_FLDR parameter"
@@ -23,7 +24,7 @@ if [ ! -d "$VIZ_APP_FLDR" ]; then
 	echo "VIZ_APP_FLDR folder does not exists: $VIZ_APP_FLDR"
 	exit 1
 fi
-echo "$VIZ_APP_FLDR"
+echo "  > VIZ_APP_FLDR: $VIZ_APP_FLDR"
 
 REMOTE_USER="$2"
 if [ -z "$REMOTE_USER" ]; then
@@ -31,7 +32,7 @@ if [ -z "$REMOTE_USER" ]; then
 	echo "REMOTE_USER is the user name of the remote machine. e.g: transapp"
 	exit 1
 fi
-echo "$REMOTE_USER"
+echo "  > REMOTE_USER: $REMOTE_USER"
 
 REMOTE_HOST="$3"
 if [ -z "$REMOTE_HOST" ]; then
@@ -39,7 +40,7 @@ if [ -z "$REMOTE_HOST" ]; then
 	echo "REMOTE_HOST is the name remote machine. e.g: 104.236.183.105"
 	exit 1
 fi
-echo "$REMOTE_HOST"
+echo "  > REMOTE_HOST: $REMOTE_HOST"
 
 REMOTE_BKP_FLDR="$4"
 if [ -z "$REMOTE_BKP_FLDR" ]; then
@@ -49,7 +50,7 @@ if [ -z "$REMOTE_BKP_FLDR" ]; then
 	echo "Any file older than 15 days on this folder will be deleted!!"
 	exit 1
 fi
-echo "$REMOTE_BKP_FLDR"
+echo "  > REMOTE_BKP_FLDR: $REMOTE_BKP_FLDR"
 
 PRIVATE_KEY="$5"
 if [ -z "$PRIVATE_KEY" ]; then
@@ -62,7 +63,7 @@ if [ ! -e "$PRIVATE_KEY" ]; then
 	echo "The PRIVATE_KEY key file does not exists: $PRIVATE_KEY"
 	exit 1
 fi
-echo "$PRIVATE_KEY"
+echo "  > PRIVATE_KEY: $PRIVATE_KEY"
 
 TMP_BKP_FLDR="$6"
 if [ -z "$TMP_BKP_FLDR" ]; then
@@ -73,7 +74,7 @@ if [ -z "$TMP_BKP_FLDR" ]; then
 	echo "this is not something important!, like '/home' or '/'."
 	exit 1
 fi
-echo "$TMP_BKP_FLDR"
+echo "  > TMP_BKP_FLDR: $TMP_BKP_FLDR"
  
 IMGS_FLDR="$7"
 if [ -z "$IMGS_FLDR" ]; then
@@ -82,7 +83,7 @@ if [ -z "$IMGS_FLDR" ]; then
 	echo "e.g: media/reported_images"
 	exit 1
 fi
-echo "$IMGS_FLDR"
+echo "  > IMGS_FLDR: $IMGS_FLDR"
 
 DATABASE_NAME="$8"
 if [ -z "$DATABASE_NAME" ]; then
@@ -90,7 +91,7 @@ if [ -z "$DATABASE_NAME" ]; then
 	echo "DATABASE_NAME represents the database name, duh."
 	exit 1
 fi
-echo "$DATABASE_NAME"
+echo "  > DATABASE_NAME: $DATABASE_NAME"
 
 BKP_TYPE="$9"
 if [ -z "$BKP_TYPE" ]; then
@@ -102,7 +103,7 @@ if [ "$BKP_TYPE" != "complete" ] && [ "$BKP_TYPE" != "partial" ] ; then
 	echo "INVALID TYPE: BKP_TYPE should be 'complete' or 'partial'"
 	exit 1
 fi
-echo "$BKP_TYPE"
+echo "  > BKP_TYPE: $BKP_TYPE"
 
 PARTIAL_BKP_TIME="${10}"
 if [ "$BKP_TYPE" = "partial" ] && [ -z "$PARTIAL_BKP_TIME" ] ; then
@@ -113,7 +114,7 @@ if [ "$BKP_TYPE" = "partial" ] && [ -z "$PARTIAL_BKP_TIME" ] ; then
 	echo "e.g2: '12 2 0' for the past 2 and a half days"
 	exit 1
 fi
-echo "$PARTIAL_BKP_TIME"
+echo "  > PARTIAL_BKP_TIME: $PARTIAL_BKP_TIME"
 
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
