@@ -78,6 +78,16 @@ if [ "$BKP_TYPE" != "complete" ] && [ "$BKP_TYPE" != "partial" ] ; then
 fi
 echo "  > BKP_TYPE: $BKP_TYPE"
 
+PARTIAL_BKP_TIME="$7"
+if [ "$BKP_TYPE" = "partial" ] && [ -z "$PARTIAL_BKP_TIME" ] ; then
+	echo "This script must be called with the PARTIAL_BKP_TIME parameter"
+	echo "PARTIAL_BKP_TIME represents the amount of time used to lookup for"
+	echo "database updates. Format is 'minutes hours days'"
+	echo "e.g: '5' for a 5 minutes lookup"
+	exit 1
+fi
+echo "  > PARTIAL_BKP_TIME: $PARTIAL_BKP_TIME"
+
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### GENERATED PARAMETERS

@@ -86,7 +86,13 @@ def complete_loaddata():
 
 
 def partial_loaddata():
-    filename, params = _retrieve_load_params()
-    params.append("2")       # keep backups at most two days
-    params.append("partial")
-    _run_script(filename, params)
+    try:
+        filename, params = _retrieve_load_params()
+        params.append("2")       # keep backups at most two days
+        params.append("partial")
+        params.append(settings.VIZ_BKP_APP_TIME)
+        _run_script(filename, params)
+
+    except Exception as e:
+        _print_param_exception()
+        raise e
