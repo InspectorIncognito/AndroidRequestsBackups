@@ -28,6 +28,9 @@ INSTALLED_APPS = (
 	'AndroidRequestsBackups',
 )
 ```
+In case that you don't have installed  django-crontab, use the next command
+
+```pip install django-crontab```
 
 ## Scheduling
 
@@ -45,7 +48,8 @@ CRONJOBS = [
 ]
 ```
 
-On (TranSappViz), the recommended setting is to schedule a lot of update checkings, this way new updates are applied as soon as possible (it's super duper free to fail if there aren't updates, assuming you are not scheduling a check every second). It is very important to keep the partial backup time interval al least at a half of the `VIZ_BKP_APP_TIME` paameter, otherwise bkps can be lost. 
+On (TranSappViz), the recommended setting is to schedule a lot of update checkings, this way new updates are applied as soon as possible (it's super duper free to fail if there aren't updates, assuming you are not scheduling a check every second). It is very important to keep the partial backup time interval al least at a half of the `VIZ_BKP_APP_TIME` paameter, otherwise bkps can be lost.
+
 ```python
 # ONLY ON (TranSappViz)
 CRONJOBS = [	
@@ -56,6 +60,7 @@ CRONJOBS = [
     ('*/2 * * * *', 'AndroidRequestsBackups.jobs.partial_loaddata',  '> /tmp/vizbkpapp_partial_loaddata_log.txt')
 ]
 ```
+
 You can see the process log on the `/tmp/vizbkpapp_*_log.txt` files.
 
 Note that is highly recommended to set the parameter `CRONTAB_LOCK_JOBS = True` on `settings.py`. This is not mandatory, but unexpected stuff might happen otherwise!.
@@ -64,39 +69,44 @@ See also [this wiki](https://en.wikipedia.org/wiki/Cron#Format) on how to write 
 
 
 ## Settings TODO:
- 
+
+Next we list you the variables that you need to setup on `settings.py`. 
+
+###On both cases
 ```
-1.- VIZ_APP_FLDR
-This script must be called with the parameter VIZ_APP_FLDR
-VIZ_APP_FLDR represents the full path to the AndroidRequestsBackups.
-VIZ_APP_FLDR folder does not exists: $VIZ_APP_FLDR
+- VIZ_BKP_APP_IMGS_FLDR
+This is the folder where are stored the images in the aplication
 
-2.- REMOTE_USER
-This script must be called with the parameter REMOTE_USER
-REMOTE_USER is the user name of the remote machine. e.g: transapp
+- VIZ_BKP_APP_REMOTE_BKP_FLDR
+this is the folder where to put backups in transappviz server 
 
-3.- REMOTE_HOST
-This script must be called with the parameter REMOTE_HOST
-REMOTE_HOST is the name remote machine. e.g: 104.236.183.105
+- VIZ_BKP_APP_TIME
+the time lapse to send partial backups
+```
+###On transapp server
+```
+- VIZ_BKP_APP_HOST_DATABASE
+database name on TranSapp server
 
-4.- REMOTE_BKP_FLDR
-This script must be called with the parameter REMOTE_BKP_FLDR
-REMOTE_BKP_FLDR is the path to the folder where backups are stored
-on the remote machine. e.g: ftp_incoming
-Any file oder than 15 days on this folder will be deleted!!
+- VIZ_BKP_APP_TMP_BKP_FLDR
+where to store temporal bkp files on transapp server
 
-5.- PRIVATE_KEY
-This script must be called with the parameter PRIVATE_KEY
-PRIVATE_KEY is the file with this server private key, used
-to connect to the remote host. e.g: /home/server/.ssh/id_rsa
-The PRIVATE_KEY key file does not exists: $PRIVATE_KEY
+- VIZ_BKP_APP_PRIVATE_KEY
+the private key of transapp server that allow you to connect with transappviz server 
 
-6.- TMP_BKP_FLDR
-This script must be called with the parameter TMP_BKP_FLDR
-TMP_BKP_FLDR is the path to the folder where backups are built
-on this server. e.g: /tmp/backup_viz
-at some point, this folder will be completely deleted, so ensure
-this is not something important!, like '/home' or '/'.
+- VIZ_BKP_APP_REMOTE_HOST
+the ip direction of the transapviz server
+
+- VIZ_BKP_APP_REMOTE_USER
+username to access to the transappviz server
+```
+###On transappviz server
+```
+- VIZ_BKP_APP_REMOTE_DATABASE
+database name of the transappviz server
+
+- VIZ_BKP_APP_BKPS_LIFETIME
+amount of days to keep backup files in the transappviz server, after that days this files will be deleted
 ```
 
 ## Finally, setting up the jobs
@@ -114,10 +124,13 @@ sudo -u root python manage.py crontab add
 
 You can check the all the jobs an user owns this way. Only make sure `root` owns our jobs. Open a terminal and type:
 ```(bash)
-sudo -u <username> python manage.py crontab add 
+sudo -u <username> python manage.py crontab show
 
-sudo -u root python manage.py crontab add 
-```
+sudo -u root python manage.py crontab show```
+
+
+
+
 
 
 
