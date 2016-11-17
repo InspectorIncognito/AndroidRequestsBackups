@@ -126,7 +126,7 @@ You can check the all the jobs an user owns this way. Only make sure `root` owns
 ```(bash)
 sudo -u <username> python manage.py crontab show
 
-sudo -u root python manage.py crontab show```
+sudo -u root python manage.py crontab show
 
 
 
