@@ -36,17 +36,11 @@ To install the `AndroidRequestsBackups` app, simple clone this repository into e
 
 ## Settings:
 
-images are retrieved from the `settings.MEDIA_IMAGE` folder
-the database names are retrieved from `settings.DATABASES['default']['NAME']`
-
-
-Next we list you the variables that you need to setup on `settings.py`. 
-
-
+Also, you each server requires the following configurations on the `settings.py` file.
 
 ### On both servers
 
-```(python)
+```python
 ## (TranSappViz) related parameters
 # Folder (full path) where to put backups on remote (TranSappViz) server.
 # Any file older than ANDROID_REQUESTS_BACKUPS_BKPS_LIFETIME days
@@ -61,10 +55,12 @@ ANDROID_REQUESTS_BACKUPS_REMOTE_BKP_FLDR = "/home/transapp/bkps"
 ANDROID_REQUESTS_BACKUPS_TIME            = "5"
 ```
 
+- The database name used to fetch and load data is taken from the `settings.DATABASES['default']['NAME']` variable.
+- Images to send are retrieved from the `settings.MEDIA_IMAGE` folder.
 
 ### On (TranSapp) server
 
-```(python)
+```python
 ## (TranSapp) related parameters
 # Folder to use for tmp processing (full path).
 # At some point, this folder can be completely deleted, so ensure
@@ -84,7 +80,7 @@ ANDROID_REQUESTS_BACKUPS_REMOTE_USER     = "transapp"
 
 ### On (TranSappViz) server
 
-```
+```python
 # Amount of days to keep "complete backup" files. Older files are deleted.
 # This value is only valid for complete backups. Partial backups are only
 # kept for 2 days
@@ -138,7 +134,7 @@ This app also requires to set the following `django-crontab` related parameters:
 
 ```python
 CRONTAB_LOCK_JOBS = True        # this way, partial jobs will stack.
-CRONTAB_COMMAND_SUFFIX = '2>&1  # this way, we can see error on log files.
+CRONTAB_COMMAND_SUFFIX = '2>&1' # this way, we can see error on log files.
 ```
 
 See also [this wiki](https://en.wikipedia.org/wiki/Cron#Format) on how to write a schedule using the cron format. 
