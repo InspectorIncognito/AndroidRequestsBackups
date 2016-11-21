@@ -40,38 +40,38 @@ Next we list you the variables that you need to setup on `settings.py`.
 
 ### On both cases
 ```
-- VIZ_BKP_APP_IMGS_FLDR
+- ANDROID_REQUESTS_BACKUPS_IMGS_FLDR
 This is the folder where are stored the images in the aplication
 
-- VIZ_BKP_APP_REMOTE_BKP_FLDR
+- ANDROID_REQUESTS_BACKUPS_REMOTE_BKP_FLDR
 this is the folder where to put backups in transappviz server 
 
-- VIZ_BKP_APP_TIME
+- ANDROID_REQUESTS_BACKUPS_TIME
 the time lapse to send partial backups
 ```
 ### On transapp server
 ```
-- VIZ_BKP_APP_HOST_DATABASE
+- ANDROID_REQUESTS_BACKUPS_HOST_DATABASE
 database name on TranSapp server
 
-- VIZ_BKP_APP_TMP_BKP_FLDR
+- ANDROID_REQUESTS_BACKUPS_TMP_BKP_FLDR
 where to store temporal bkp files on transapp server
 
-- VIZ_BKP_APP_PRIVATE_KEY
+- ANDROID_REQUESTS_BACKUPS_PRIVATE_KEY
 the private key of transapp server that allow you to connect with transappviz server 
 
-- VIZ_BKP_APP_REMOTE_HOST
+- ANDROID_REQUESTS_BACKUPS_REMOTE_HOST
 the ip direction of the transapviz server
 
-- VIZ_BKP_APP_REMOTE_USER
+- ANDROID_REQUESTS_BACKUPS_REMOTE_USER
 username to access to the transappviz server
 ```
 ### On transappviz server
 ```
-- VIZ_BKP_APP_REMOTE_DATABASE
+- ANDROID_REQUESTS_BACKUPS_REMOTE_DATABASE
 database name of the transappviz server
 
-- VIZ_BKP_APP_BKPS_LIFETIME
+- ANDROID_REQUESTS_BACKUPS_BKPS_LIFETIME
 amount of days to keep complete backup files in the transappviz server, after that days this files will be deleted
 this time is fixed to 2 days for partial backups
 ```
@@ -101,7 +101,7 @@ CRONJOBS = [
 
 The recommended setting is to schedule a lot of update checkings, this way new updates are applied as soon as possible (it's super duper free to fail if there aren't updates, assuming you are not scheduling a check every second). 
 
-It is very important to keep the partial backup time interval AT MOST at a half of the `VIZ_BKP_APP_TIME` parameter, otherwise bkps will be stacked, which will result on a fixed update delay of `VIZ_BKP_APP_BKPS_LIFETIME` days (for complete bkps) or 2 days (for partial bkps).
+It is very important to keep the partial backup time interval AT MOST at a half of the `ANDROID_REQUESTS_BACKUPS_TIME` parameter, otherwise bkps will be stacked, which will result on a fixed update delay of `ANDROID_REQUESTS_BACKUPS_BKPS_LIFETIME` days (for complete bkps) or 2 days (for partial bkps).
 
 ```python
 # ONLY ON (TranSappViz)
@@ -131,7 +131,7 @@ See also [this wiki](https://en.wikipedia.org/wiki/Cron#Format) on how to write 
 
 ### Considerations:
 
-Disk Space is a limited resource on Web Servers, so make sure not to fill them with garbage (i.e, backups). This can only happen on (TranSappViz), specially for complete backups, when they are scheduled to be run too often (like hours, minutes.) and when the `VIZ_BKP_APP_BKPS_LIFETIME` variable is too large.
+Disk Space is a limited resource on Web Servers, so make sure not to fill them with garbage (i.e, backups). This can only happen on (TranSappViz), specially for complete backups, when they are scheduled to be run too often (like hours, minutes.) and when the `ANDROID_REQUESTS_BACKUPS_BKPS_LIFETIME` variable is too large.
 
 At the moment, (TranSappViz) has a 20GB disk, and each complete backup ... ...
 

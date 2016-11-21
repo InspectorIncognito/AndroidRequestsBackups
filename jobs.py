@@ -4,7 +4,7 @@ from django.conf import settings
 
 def _print_param_exception():
     print("MISSING SOME PARAMETERS FROM settings.py. MAKE SURE ALL " +
-          "REQUIRED VIZ_BKP_APP_ STUFF EXISTS.")
+          "REQUIRED ANDROID_REQUESTS_BACKUPS_ STUFF EXISTS.")
 
 def _run_script(filename, args=[]):
 
@@ -24,13 +24,13 @@ def _retrieve_dump_params():
             "dump.sh",
             [
                 os.path.dirname(os.path.realpath(__file__)),
-                settings.VIZ_BKP_APP_REMOTE_USER,
-                settings.VIZ_BKP_APP_REMOTE_HOST,
-                settings.VIZ_BKP_APP_REMOTE_BKP_FLDR,
-                settings.VIZ_BKP_APP_PRIVATE_KEY,
-                settings.VIZ_BKP_APP_TMP_BKP_FLDR,
-                settings.VIZ_BKP_APP_IMGS_FLDR,
-                settings.VIZ_BKP_APP_HOST_DATABASE
+                settings.ANDROID_REQUESTS_BACKUPS_REMOTE_USER,
+                settings.ANDROID_REQUESTS_BACKUPS_REMOTE_HOST,
+                settings.ANDROID_REQUESTS_BACKUPS_REMOTE_BKP_FLDR,
+                settings.ANDROID_REQUESTS_BACKUPS_PRIVATE_KEY,
+                settings.ANDROID_REQUESTS_BACKUPS_TMP_BKP_FLDR,
+                settings.ANDROID_REQUESTS_BACKUPS_IMGS_FLDR,
+                settings.ANDROID_REQUESTS_BACKUPS_HOST_DATABASE
             ]
         )
         return element
@@ -45,9 +45,9 @@ def _retrieve_load_params():
             "loaddata.sh",
             [
                 settings.BASE_DIR,
-                settings.VIZ_BKP_APP_REMOTE_BKP_FLDR,
-                settings.VIZ_BKP_APP_IMGS_FLDR,
-                settings.VIZ_BKP_APP_REMOTE_DATABASE,
+                settings.ANDROID_REQUESTS_BACKUPS_REMOTE_BKP_FLDR,
+                settings.ANDROID_REQUESTS_BACKUPS_IMGS_FLDR,
+                settings.ANDROID_REQUESTS_BACKUPS_REMOTE_DATABASE,
             ]
         )
         return element
@@ -65,7 +65,7 @@ def partial_dump():
     try:
         filename, params = _retrieve_dump_params()
         params.append("partial")
-        params.append(settings.VIZ_BKP_APP_TIME)
+        params.append(settings.ANDROID_REQUESTS_BACKUPS_TIME)
         _run_script(filename, params)
 
     except Exception as e:
@@ -76,7 +76,7 @@ def partial_dump():
 def complete_loaddata():
     try:
         filename, params = _retrieve_load_params()
-        params.append(settings.VIZ_BKP_APP_BKPS_LIFETIME)
+        params.append(settings.ANDROID_REQUESTS_BACKUPS_BKPS_LIFETIME)
         params.append("complete")
         _run_script(filename, params)
 
@@ -90,7 +90,7 @@ def partial_loaddata():
         filename, params = _retrieve_load_params()
         params.append("2")       # keep backups at most two days
         params.append("partial")
-        params.append(settings.VIZ_BKP_APP_TIME)
+        params.append(settings.ANDROID_REQUESTS_BACKUPS_TIME)
         _run_script(filename, params)
 
     except Exception as e:
