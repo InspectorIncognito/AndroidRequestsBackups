@@ -14,17 +14,18 @@ fi
 #### USER PARAMETERS
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 echo " - checking parameters:"
-VIZ_APP_FLDR="$1"
-if [ -z "$VIZ_APP_FLDR" ]; then
-	echo "This script must be called with the VIZ_APP_FLDR parameter"
-	echo "VIZ_APP_FLDR represents the full path to the AndroidRequestsBackups."
+SERVER_FLDR="$1"
+if [ -z "$SERVER_FLDR" ]; then
+	echo "This script must be called with the SERVER_FLDR parameter"
+	echo "SERVER_FLDR represents the full path to this server."
+	echo "e.g: /home/transapp/visualization"
 	exit 1
 fi
-if [ ! -d "$VIZ_APP_FLDR" ]; then
-	echo "VIZ_APP_FLDR folder does not exists: $VIZ_APP_FLDR"
+if [ ! -d "$SERVER_FLDR" ]; then
+	echo "SERVER_FLDR folder does not exists: $SERVER_FLDR"
 	exit 1
 fi
-echo "  > VIZ_APP_FLDR: $VIZ_APP_FLDR"
+echo "  > SERVER_FLDR: $SERVER_FLDR"
 
 REMOTE_USER="$2"
 if [ -z "$REMOTE_USER" ]; then
@@ -47,7 +48,7 @@ if [ -z "$REMOTE_BKP_FLDR" ]; then
 	echo "This script must be called with the REMOTE_BKP_FLDR parameter"
 	echo "REMOTE_BKP_FLDR is the FULL path to the folder where backups are stored"
 	echo "on the remote machine. e.g: '/home/transapp/bkps', will lead to bkps/complete and bkps/partial"
-	echo "Any file older than 15 days on this folder will be deleted!!"
+	echo "Any file older than N days on this folder will be deleted!!"
 	exit 1
 fi
 echo "  > REMOTE_BKP_FLDR: $REMOTE_BKP_FLDR"
@@ -79,8 +80,8 @@ echo "  > TMP_BKP_FLDR: $TMP_BKP_FLDR"
 IMGS_FLDR="$7"
 if [ -z "$IMGS_FLDR" ]; then
 	echo "This script must be called with the IMGS_FLDR parameter"
-	echo "IMGS_FLDR represents the path where images are stored, relative to the server folder"
-	echo "e.g: media/reported_images"
+	echo "IMGS_FLDR represents the full path to the folder where images are stored"
+	echo "e.g: /home/server/server/media/reported_images"
 	exit 1
 fi
 echo "  > IMGS_FLDR: $IMGS_FLDR"
@@ -120,6 +121,9 @@ echo "  > PARTIAL_BKP_TIME: $PARTIAL_BKP_TIME"
 #### GENERATED PARAMETERS
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
+
+VIZ_APP_FLDR="$SERVER_FLDR/AndroidRequestsBackups"
+
 TMP_BKP_FLDR="$TMP_BKP_FLDR"/"$BKP_TYPE"
 REMOTE_BKP_FLDR="$REMOTE_BKP_FLDR"/"$BKP_TYPE"
 
@@ -133,10 +137,6 @@ REMOTE_USERHOST="$REMOTE_USER"@"$REMOTE_HOST"
 
 # for sftp
 SFTP_COMMANDS="$TMP_BKP_FLDR"/sftp_commands.txt
-
-# django
-SERVER_FLDR=$(dirname "$VIZ_APP_FLDR")
-IMGS_FLDR="$SERVER_FLDR"/"$IMGS_FLDR"
 
 # tmp
 export TMP_BKP_DB_FULL="$TMP_BKP_FLDR"/"$TMP_DB_BACKUP"
@@ -152,8 +152,7 @@ echo "  > TMP_DB_BACKUP: $TMP_DB_BACKUP"
 echo "  > TMP_BKP_FILE: $TMP_BKP_FILE"
 echo "  > REMOTE_USERHOST: $REMOTE_USERHOST"
 echo "  > SFTP_COMMANDS: $SFTP_COMMANDS"
-echo "  > SERVER_FLDR: $SERVER_FLDR"
-echo "  > IMGS_FLDR: $IMGS_FLDR"
+echo "  > VIZ_APP_FLDR: $VIZ_APP_FLDR"
 echo "  > TMP_BKP_DB_FULL: $TMP_BKP_DB_FULL"
 echo "  > TMP_BKP_IMGS_FULL: $TMP_BKP_IMGS_FULL"
 echo "  > TMP_BKP_FILE_FULL: $TMP_BKP_FILE_FULL"
@@ -165,6 +164,10 @@ echo "  > TMP_BKP_FILE_FULL: $TMP_BKP_FILE_FULL"
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 if [ ! -d "$SERVER_FLDR" ]; then
 	echo " - server folder not found: $SERVER_FLDR"
+	exit 1
+fi
+if [ ! -d "$VIZ_APP_FLDR" ]; then
+	echo "VIZ_APP_FLDR folder does not exists: $VIZ_APP_FLDR"
 	exit 1
 fi
 if [ ! -d "$IMGS_FLDR" ]; then

@@ -36,44 +36,59 @@ To install the `AndroidRequestsBackups` app, simple clone this repository into e
 
 ## Settings:
 
+images are retrieved from the `settings.MEDIA_IMAGE` folder
+the database names are retrieved from `settings.DATABASES['default']['NAME']`
+
+
 Next we list you the variables that you need to setup on `settings.py`. 
 
-### On both cases
+
+
+### On both servers
+
+```(python)
+## (TranSappViz) related parameters
+# Folder (full path) where to put backups on remote (TranSappViz) server.
+# Any file older than ANDROID_REQUESTS_BACKUPS_BKPS_LIFETIME days
+# will be deleted!
+# This value MUST match the one on the other server!, otherwise
+# really bad stuff might happen
+ANDROID_REQUESTS_BACKUPS_REMOTE_BKP_FLDR = "/home/transapp/bkps"
+
+# Amount of minutes to send to the remote (TranSappViz) server.
+# This value MUST match the one on the other server!, otherwise
+# some data can be lost
+ANDROID_REQUESTS_BACKUPS_TIME            = "5"
 ```
-- ANDROID_REQUESTS_BACKUPS_IMGS_FLDR
-This is the folder where are stored the images in the aplication
 
-- ANDROID_REQUESTS_BACKUPS_REMOTE_BKP_FLDR
-this is the folder where to put backups in transappviz server 
 
-- ANDROID_REQUESTS_BACKUPS_TIME
-the time lapse to send partial backups
+### On (TranSapp) server
+
+```(python)
+## (TranSapp) related parameters
+# Folder to use for tmp processing (full path).
+# At some point, this folder can be completely deleted, so ensure
+# this is not something important!, like '/home' or '/'."
+ANDROID_REQUESTS_BACKUPS_TMP_BKP_FLDR    = "/tmp/backup_viz"
+
+
+# remote (TranSappViz) server credentials.
+# - private key: used to access the remote
+# - remote host: IP of the remote host
+# - remote user: username on the remote
+ANDROID_REQUESTS_BACKUPS_PRIVATE_KEY     = "/home/server/.ssh/id_rsa"
+ANDROID_REQUESTS_BACKUPS_REMOTE_HOST     = "104.236.183.105"
+ANDROID_REQUESTS_BACKUPS_REMOTE_USER     = "transapp"
 ```
-### On transapp server
+
+
+### On (TranSappViz) server
+
 ```
-- ANDROID_REQUESTS_BACKUPS_HOST_DATABASE
-database name on TranSapp server
-
-- ANDROID_REQUESTS_BACKUPS_TMP_BKP_FLDR
-where to store temporal bkp files on transapp server
-
-- ANDROID_REQUESTS_BACKUPS_PRIVATE_KEY
-the private key of transapp server that allow you to connect with transappviz server 
-
-- ANDROID_REQUESTS_BACKUPS_REMOTE_HOST
-the ip direction of the transapviz server
-
-- ANDROID_REQUESTS_BACKUPS_REMOTE_USER
-username to access to the transappviz server
-```
-### On transappviz server
-```
-- ANDROID_REQUESTS_BACKUPS_REMOTE_DATABASE
-database name of the transappviz server
-
-- ANDROID_REQUESTS_BACKUPS_BKPS_LIFETIME
-amount of days to keep complete backup files in the transappviz server, after that days this files will be deleted
-this time is fixed to 2 days for partial backups
+# Amount of days to keep "complete backup" files. Older files are deleted.
+# This value is only valid for complete backups. Partial backups are only
+# kept for 2 days
+ANDROID_REQUESTS_BACKUPS_BKPS_LIFETIME   = "10"
 ```
 
 
@@ -90,10 +105,10 @@ The recommended setting is to schedule complete backups once a day and partial b
 # ONLY ON (TranSapp)
 CRONJOBS = [	
     # daily complete backup at 3:30am
-    ('30  3 * * *', 'AndroidRequestsBackups.jobs.complete_dump', '> /tmp/vizbkpapp_complete_dump_log.txt')
+    ('30  3 * * *', 'AndroidRequestsBackups.jobs.complete_dump', '> /tmp/android_request_bkps_complete_dump_log.txt')
     
     # partial backups every 5 minutes
-    ('*/5 * * * *', 'AndroidRequestsBackups.jobs.partial_dump',  '> /tmp/vizbkpapp_partial_dump_log.txt')
+    ('*/5 * * * *', 'AndroidRequestsBackups.jobs.partial_dump',  '> /tmp/android_request_bkps_partial_dump_log.txt')
 ]
 ```  
 
@@ -107,16 +122,16 @@ It is very important to keep the partial backup time interval AT MOST at a half 
 # ONLY ON (TranSappViz)
 CRONJOBS = [	
     # check for complete updates every one hour
-    ('0 */1 * * *', 'AndroidRequestsBackups.jobs.complete_loaddata', '> /tmp/vizbkpapp_complete_loaddata_log.txt')
+    ('0 */1 * * *', 'AndroidRequestsBackups.jobs.complete_loaddata', '> /tmp/android_request_bkps_complete_loaddata_log.txt')
     
     # check for partial updates every 2 minutes
-    ('*/2 * * * *', 'AndroidRequestsBackups.jobs.partial_loaddata',  '> /tmp/vizbkpapp_partial_loaddata_log.txt')
+    ('*/1 * * * *', 'AndroidRequestsBackups.jobs.partial_loaddata',  '> /tmp/android_request_bkps_partial_loaddata_log.txt')
 ]
 ```
 
 ### On both
 
-On each server, you can see the process logs on the `/tmp/vizbkpapp_*_log.txt` files.
+On each server, you can see the process logs on the `/tmp/android_request_bkps_*_log.txt` files.
 
 
 This app also requires to set the following `django-crontab` related parameters:
@@ -138,9 +153,9 @@ At the moment, (TranSappViz) has a 20GB disk, and each complete backup ... ...
 
 ## Finally, setting up the jobs
 
-This must be done with root privileges, because we want to access the databases, drop them and create new ones on (TranSappViz), and finally, because all files on (TranSapp) can be only modified by root.
+This must be done with root privileges on both servers. On both (TranSapp) and (TranSappViz), we need to access the database as the postgres user to perform dumps and loads. Also, some (TranSapp) server files can only be modified by root.
 
-So, we need remove outdated jobs, and add the new ones. Open a terminal and type:
+So, we need to remove outdated jobs, and add the new ones. Open a terminal and type:
 ```(bash)
 cd <path to the server folder>
 
@@ -149,7 +164,7 @@ sudo -u root python manage.py crontab remove
 sudo -u root python manage.py crontab add
 ```
 
-You can check the all the jobs an user owns this way. Only make sure `root` owns our jobs. Open a terminal and type:
+You can check the all the jobs an user owns this way. Only make sure only the `root` owns the `AndroidRequestsBackups` jobs. Open a terminal and type:
 ```(bash)
 sudo -u <username> python manage.py crontab show
 

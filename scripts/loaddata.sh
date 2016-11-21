@@ -43,8 +43,8 @@ echo "  > BACKUP_FOLDER: $BACKUP_FOLDER"
 IMGS_FLDR="$3"
 if [ -z "$IMGS_FLDR" ]; then
 	echo "This script must be called with the IMGS_FLDR parameter"
-	echo "IMGS_FLDR represents the path the folder where images are stored, relative to SERVER_FLDR"
-	echo "e.g: media/reported_images"
+	echo "IMGS_FLDR represents the full path to the folder where images are stored"
+	echo "e.g: /home/transapp/visualization/media/reported_images"
 	exit 1
 fi
 echo "  > IMGS_FLDR: $IMGS_FLDR"
@@ -61,6 +61,7 @@ BKPS_LIFETIME="$5"
 if [ -z "$BKPS_LIFETIME" ]; then
 	echo "This script must be called with the BKPS_LIFETIME parameter"
 	echo "BKPS_LIFETIME represents the number of days to keep backup files alive."
+	echo "This time is fixed for partial backups to 2 days."
 	echo "e.g.: 15"
 	exit 1
 fi
@@ -103,7 +104,6 @@ TMP_DB_BACKUP=database.tar.gz
 
 
 THIS_APP_FLDR="$SERVER_FLDR/AndroidRequestsBackups"
-IMGS_FLDR="$SERVER_FLDR/$IMGS_FLDR"
 
 MANAGE_PY="$SERVER_FLDR/manage.py"
 

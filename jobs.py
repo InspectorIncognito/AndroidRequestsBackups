@@ -9,8 +9,8 @@ def _print_param_exception():
 def _run_script(filename, args=[]):
 
     # build command
-    app_path = os.path.dirname(os.path.realpath(__file__))
-    command = "bash " + app_path + "/scripts/" + filename
+    app_path = settings.BASE_DIR + "/AndroidRequestBackups/"
+    command = "bash " + app_path + "scripts/" + filename
     for arg in args:
         command += " " + arg
 
@@ -23,14 +23,14 @@ def _retrieve_dump_params():
         element = (
             "dump.sh",
             [
-                os.path.dirname(os.path.realpath(__file__)),
+                settings.BASE_DIR,
                 settings.ANDROID_REQUESTS_BACKUPS_REMOTE_USER,
                 settings.ANDROID_REQUESTS_BACKUPS_REMOTE_HOST,
                 settings.ANDROID_REQUESTS_BACKUPS_REMOTE_BKP_FLDR,
                 settings.ANDROID_REQUESTS_BACKUPS_PRIVATE_KEY,
                 settings.ANDROID_REQUESTS_BACKUPS_TMP_BKP_FLDR,
-                settings.ANDROID_REQUESTS_BACKUPS_IMGS_FLDR,
-                settings.ANDROID_REQUESTS_BACKUPS_HOST_DATABASE
+                settings.MEDIA_IMAGE,
+                settings.DATABASES['default']['NAME']
             ]
         )
         return element
@@ -46,8 +46,8 @@ def _retrieve_load_params():
             [
                 settings.BASE_DIR,
                 settings.ANDROID_REQUESTS_BACKUPS_REMOTE_BKP_FLDR,
-                settings.ANDROID_REQUESTS_BACKUPS_IMGS_FLDR,
-                settings.ANDROID_REQUESTS_BACKUPS_REMOTE_DATABASE,
+                settings.MEDIA_IMAGE,
+                settings.DATABASES['default']['NAME']
             ]
         )
         return element
