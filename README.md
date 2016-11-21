@@ -36,13 +36,7 @@ To install the `AndroidRequestsBackups` app, simple clone this repository into e
 
 ## Settings:
 
-images are retrieved from the `settings.MEDIA_IMAGE` folder
-the database names are retrieved from `settings.DATABASES['default']['NAME']`
-
-
-Next we list you the variables that you need to setup on `settings.py`. 
-
-
+Also, you each server requires the following configurations on the `settings.py` file.
 
 ### On both servers
 
@@ -61,6 +55,8 @@ ANDROID_REQUESTS_BACKUPS_REMOTE_BKP_FLDR = "/home/transapp/bkps"
 ANDROID_REQUESTS_BACKUPS_TIME            = "5"
 ```
 
+- The database name used to fetch and load data is taken from the `settings.DATABASES['default']['NAME']` variable.
+- Images to send are retrieved from the `settings.MEDIA_IMAGE` folder.
 
 ### On (TranSapp) server
 
