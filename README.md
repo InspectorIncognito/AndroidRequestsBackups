@@ -138,7 +138,7 @@ This app also requires to set the following `django-crontab` related parameters:
 
 ```python
 CRONTAB_LOCK_JOBS = True        # this way, partial jobs will stack.
-CRONTAB_COMMAND_SUFFIX = '2>&1  # this way, we can see error on log files.
+CRONTAB_COMMAND_SUFFIX = '2>&1' # this way, we can see error on log files.
 ```
 
 See also [this wiki](https://en.wikipedia.org/wiki/Cron#Format) on how to write a schedule using the cron format. 
