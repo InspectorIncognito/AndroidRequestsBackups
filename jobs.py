@@ -9,7 +9,7 @@ def _print_param_exception():
 def _run_script(filename, args=[]):
 
     # build command
-    app_path = settings.BASE_DIR + "/AndroidRequestBackups/"
+    app_path = settings.BASE_DIR + "/AndroidRequestsBackups/"
     command = "bash " + app_path + "scripts/" + filename
     for arg in args:
         command += " " + arg
