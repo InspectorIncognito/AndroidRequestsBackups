@@ -40,7 +40,7 @@ Also, you each server requires the following configurations on the `settings.py`
 
 ### On both servers
 
-```(python)
+```python
 ## (TranSappViz) related parameters
 # Folder (full path) where to put backups on remote (TranSappViz) server.
 # Any file older than ANDROID_REQUESTS_BACKUPS_BKPS_LIFETIME days
@@ -60,7 +60,7 @@ ANDROID_REQUESTS_BACKUPS_TIME            = "5"
 
 ### On (TranSapp) server
 
-```(python)
+```python
 ## (TranSapp) related parameters
 # Folder to use for tmp processing (full path).
 # At some point, this folder can be completely deleted, so ensure
@@ -80,7 +80,7 @@ ANDROID_REQUESTS_BACKUPS_REMOTE_USER     = "transapp"
 
 ### On (TranSappViz) server
 
-```
+```python
 # Amount of days to keep "complete backup" files. Older files are deleted.
 # This value is only valid for complete backups. Partial backups are only
 # kept for 2 days
