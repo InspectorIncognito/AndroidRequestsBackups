@@ -14,16 +14,14 @@ class appTest(TestCase):
         pass
         #out = StringIO()
         #call_command('visualization_backup_dump', stdout=out)
-        complete_dump()
-        partial_dump()
+        #complete_dump()
+        #partial_dump()
         #self.assertIn('Expected output', out.getvalue())
 
     def test_command_output2(self):
         pass
         #out = StringIO()
         #call_command('visualization_backup_loaddata', stdout=out)
-
         #self.assertIn('Expected output', out.getvalue())
-
-        complete_loaddata()
-        partial_loaddata()
+        #complete_loaddata()
+        #partial_loaddata()

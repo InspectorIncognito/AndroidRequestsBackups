@@ -198,15 +198,32 @@ fi
 #### BACKUP CREATION
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
+#### run backup script
+#### ----- ----- ----- ----- ----- ----- ----- ----- -----
+
 cd "$VIZ_APP_FLDR"
 source scripts/"$BKP_TYPE"_dump.sh
+
+
+#### create metadata
+#### ----- ----- ----- ----- ----- ----- ----- ----- -----
+
+TMP_METADATA_BACKUP="metadata.txt"
+cd "$TMP_BKP_FLDR"
+cat "date: $(date)"       >> "$TMP_METADATA_BACKUP"
+cat "user: $USER"         >> "$TMP_METADATA_BACKUP"
+cat "bkp-type: $BKP_TYPE" >> "$TMP_METADATA_BACKUP"
+cat "'uname -a' output: " >> "$TMP_METADATA_BACKUP"
+uname -a >> "$TMP_METADATA_BACKUP"
+cat "'ifconfig' output: " >> "$TMP_METADATA_BACKUP"
+ifconfig >> "$TMP_METADATA_BACKUP"
 
 
 #### create single backup
 #### ----- ----- ----- ----- ----- ----- ----- ----- -----
 
 cd "$TMP_BKP_FLDR"
-tar -zcf "$TMP_BKP_FILE" "$TMP_DB_BACKUP" "$TMP_IMG_BACKUP"
+tar -zcf "$TMP_BKP_FILE" "$TMP_DB_BACKUP" "$TMP_IMG_BACKUP" "$TMP_METADATA_BACKUP"
 if [ ! -e "$TMP_BKP_FILE" ]; then
 	echo "UPS!.. The backup file was not found. Something went wrong while compressing the files"
 	exit 1
@@ -251,6 +268,11 @@ sftp -p -i "$PRIVATE_KEY" -b "$SFTP_COMMANDS" "$REMOTE_USERHOST"
 echo "- deleting stuff"
 if [ -d "$TMP_BKP_FLDR" ]; then
 	cd "$TMP_BKP_FLDR"
+
+	# delete metadata
+	if [ -e "$TMP_METADATA_BACKUP" ]; then
+		rm -f "$TMP_METADATA_BACKUP"
+	fi
 
 	# delete db_backup
 	if [ -e "$TMP_BKP_DB_FULL" ]; then	
