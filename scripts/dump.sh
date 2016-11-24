@@ -114,6 +114,11 @@ if [ "$BKP_TYPE" = "partial" ] && [ -z "$PARTIAL_BKP_TIME" ] ; then
 	echo "e.g: '5' for a 5 minutes lookup"
 	exit 1
 fi
+number_regex='^[1-9][0-9]*$'
+if ! [[ $PARTIAL_BKP_TIME =~ $number_regex ]] ; then
+   echo "PARTIAL_BKP_TIME must be a positive integer. given: $PARTIAL_BKP_TIME"
+   exit 1
+fi
 echo "  > PARTIAL_BKP_TIME: $PARTIAL_BKP_TIME"
 
 
