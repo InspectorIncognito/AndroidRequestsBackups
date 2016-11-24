@@ -31,7 +31,47 @@ INSTALLED_APPS = (
 
 The `django-crontab` python package can be installed using: `pip install django-crontab`
 
-To install the `AndroidRequestsBackups` app, simple clone this repository into each server root folder.
+### Installing `AndroidRequestsBackups`
+
+To install the `AndroidRequestsBackups` app, the recommended procedure is to install it as a submodule:
+```bash
+$ cd <server_repo>
+$ git submodule add https://github.com/InspectorIncognito/AndroidRequestsBackups.git
+$ git submodule init
+$ git submodule update
+```
+
+#### Mantaining the submodule up to date:
+
+Whenever you have modified the submodule files, you can push them as usual. But then, you will have to update your repo reference:
+```bash
+# add new/updated files
+$ cd <submodule>
+$ git add ...
+$ git commit -m "blah ..."
+$ git push ...
+
+# update reference
+$ cd <server_repo>
+$ git add AndroidRequestsBackups
+$ git commit -m "just updated my hash of AndroidRequestsBackups"
+$ git push ...
+```
+
+Whenever you want to update your repository submodules, simply update all stuff:
+```bash
+$ cd <server_repo>
+
+# dowload your repo changes
+$ git fetch
+$ git merge origin/master
+
+# update submodule
+$ git submodule update
+```
+
+For more information on git submodule usage, see [the official book](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
+
 
 
 ## Settings:
