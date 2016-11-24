@@ -65,6 +65,11 @@ if [ -z "$BKPS_LIFETIME" ]; then
 	echo "e.g.: 5"
 	exit 1
 fi
+number_regex='^[1-9][0-9]*$'
+if ! [[ $BKPS_LIFETIME =~ $number_regex ]] ; then
+   echo "BKPS_LIFETIME must be a positive integer. given: $BKPS_LIFETIME"
+   exit 1
+fi
 echo "  > BKPS_LIFETIME: $BKPS_LIFETIME"
 
 BKP_TYPE="$6"
@@ -86,6 +91,11 @@ if [ "$BKP_TYPE" = "partial" ] && [ -z "$PARTIAL_BKP_TIME" ] ; then
 	echo "database updates. Format is 'minutes hours days'"
 	echo "e.g: '5' for a 5 minutes lookup"
 	exit 1
+fi
+number_regex='^[1-9][0-9]*$'
+if ! [[ $PARTIAL_BKP_TIME =~ $number_regex ]] ; then
+   echo "PARTIAL_BKP_TIME must be a positive integer. given: $PARTIAL_BKP_TIME"
+   exit 1
 fi
 echo "  > PARTIAL_BKP_TIME: $PARTIAL_BKP_TIME"
 
@@ -197,7 +207,8 @@ done
 echo " - deleting files older than $BKPS_LIFETIME days on $BACKUP_FOLDER"
 if [ -d "$BACKUP_FOLDER" ]; then
 	cd "$BACKUP_FOLDER"
-	find "$BACKUP_FOLDER" -ctime +"$BKPS_LIFETIME" -type f -delete	
+	greater_than_days=$(( ${BKPS_LIFETIME} - 1 ))
+	find "$BACKUP_FOLDER" -ctime "+$greater_than_days" -type f -delete
 fi
 
 echo " - looking for new $BKP_TYPE backup file"
