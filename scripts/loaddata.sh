@@ -61,8 +61,8 @@ BKPS_LIFETIME="$5"
 if [ -z "$BKPS_LIFETIME" ]; then
 	echo "This script must be called with the BKPS_LIFETIME parameter"
 	echo "BKPS_LIFETIME represents the number of days to keep backup files alive."
-	echo "This time is fixed for partial backups to 2 days."
-	echo "e.g.: 15"
+	echo "This time is fixed for partial backups to 1 days."
+	echo "e.g.: 5"
 	exit 1
 fi
 echo "  > BKPS_LIFETIME: $BKPS_LIFETIME"
@@ -194,8 +194,9 @@ done
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 # delete old stuff older than N days
-echo " - deleting files older than N days on $BACKUP_FOLDER"
+echo " - deleting files older than $BKPS_LIFETIME days on $BACKUP_FOLDER"
 if [ -d "$BACKUP_FOLDER" ]; then
+	cd "$BACKUP_FOLDER"
 	find "$BACKUP_FOLDER" -ctime +"$BKPS_LIFETIME" -type f -delete	
 fi
 

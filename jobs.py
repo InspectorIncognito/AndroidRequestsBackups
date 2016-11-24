@@ -88,7 +88,7 @@ def complete_loaddata():
 def partial_loaddata():
     try:
         filename, params = _retrieve_load_params()
-        params.append("2")       # keep backups at most two days
+        params.append("1")       # keep backups at most one day
         params.append("partial")
         params.append(settings.ANDROID_REQUESTS_BACKUPS_TIME)
         _run_script(filename, params)
