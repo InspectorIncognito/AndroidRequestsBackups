@@ -123,8 +123,8 @@ ANDROID_REQUESTS_BACKUPS_REMOTE_USER     = "transapp"
 ```python
 # Amount of days to keep "complete backup" files. Older files are deleted.
 # This value is only valid for complete backups. Partial backups are only
-# kept for 2 days
-ANDROID_REQUESTS_BACKUPS_BKPS_LIFETIME   = "10"
+# kept for 1 day
+ANDROID_REQUESTS_BACKUPS_BKPS_LIFETIME   = "4"
 ```
 
 
@@ -182,9 +182,11 @@ See also [this wiki](https://en.wikipedia.org/wiki/Cron#Format) on how to write 
 
 ### Considerations:
 
-Disk Space is a limited resource on Web Servers, so make sure not to fill them with garbage (i.e, backups). This can only happen on (TranSappViz), specially for complete backups, when they are scheduled to be run too often (like hours, minutes.) and when the `ANDROID_REQUESTS_BACKUPS_BKPS_LIFETIME` variable is too large.
+Disk Space is a limited resource on Web Servers, so make sure not to fill them with garbage (i.e, backups). This can only happen on (TranSappViz), specially for complete backups, when they are scheduled to be run too often (like hours, minutes.) or when the `ANDROID_REQUESTS_BACKUPS_BKPS_LIFETIME` variable is too large.
 
-At the moment, (TranSappViz) has a 20GB disk, and each complete backup ... ...
+At the moment, (TranSappViz) has a 20GB disk, and each complete backup is ~50MB size .. so using a 10 days lifetime will give you a 500MB occupied disk space. 
+
+If you somehow managed to fill the disk, then everything will die... YOU DO NOT WANT THIS TO HAPPEN!.. So please, be carefull.
 
 
 ## Finally, setting up the jobs
