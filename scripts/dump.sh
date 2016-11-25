@@ -218,12 +218,12 @@ source scripts/"$BKP_TYPE"_dump.sh
 
 TMP_METADATA_BACKUP="metadata.txt"
 cd "$TMP_BKP_FLDR"
-cat "date: $(date)"       >> "$TMP_METADATA_BACKUP"
-cat "user: $USER"         >> "$TMP_METADATA_BACKUP"
-cat "bkp-type: $BKP_TYPE" >> "$TMP_METADATA_BACKUP"
-cat "'uname -a' output: " >> "$TMP_METADATA_BACKUP"
+echo "date: $(date)"       >> "$TMP_METADATA_BACKUP"
+echo "user: $USER"         >> "$TMP_METADATA_BACKUP"
+echo "bkp-type: $BKP_TYPE" >> "$TMP_METADATA_BACKUP"
+echo "'uname -a' output: " >> "$TMP_METADATA_BACKUP"
 uname -a >> "$TMP_METADATA_BACKUP"
-cat "'ifconfig' output: " >> "$TMP_METADATA_BACKUP"
+echo "'ifconfig' output: " >> "$TMP_METADATA_BACKUP"
 ifconfig >> "$TMP_METADATA_BACKUP"
 
 
