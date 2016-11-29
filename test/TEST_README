@@ -1,0 +1,36 @@
+
+
+
+TODO:
+no enviar archivo al home, sino que al backup_folder/test
+
+
+
+
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+ssh mpavez@localhost -i .ssh/id_rsa
+
+
+
+
+tests to be done
+===============================================
+
+ON (TRANSAPP)
+- requirements are installed:
+	- ifconfig
+	- tar
+	- ...
+
+- ssh connection to real viz server
+- sftp connection to real server
+- permisions
+
+
+ON (TRANSAPP VIZ)
+- permisions
+- ...
+
+
+
+
