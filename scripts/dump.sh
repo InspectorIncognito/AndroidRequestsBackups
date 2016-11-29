@@ -224,7 +224,7 @@ echo "bkp-type: $BKP_TYPE" >> "$TMP_METADATA_BACKUP"
 echo "'uname -a' output: " >> "$TMP_METADATA_BACKUP"
 uname -a >> "$TMP_METADATA_BACKUP"
 echo "'ifconfig' output: " >> "$TMP_METADATA_BACKUP"
-ifconfig >> "$TMP_METADATA_BACKUP"
+/sbin/ifconfig >> "$TMP_METADATA_BACKUP" # full path to ifconfig, otherwise, cron will not find it
 
 
 #### create single backup
