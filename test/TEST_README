@@ -1,9 +1,5 @@
 
 TODO:
-- crear test suite que corra los scripts en orden
-
-  ssh ---> sftp
-
 - revisar dump.sh y loaddata.sh, en busca de cosas testeables
 
 - carpetas y archivos "writables" o "readables"
@@ -18,26 +14,3 @@ fi
 
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 ssh mpavez@localhost -i .ssh/id_rsa
-
-
-
-
-tests to be done
-===============================================
-
-ON (TRANSAPP)
-- requirements are installed:
-	- ifconfig
-	- tar
-	- ...
-
-- permisions
-
-
-ON (TRANSAPP VIZ)
-- permisions
-- ...
-
-
-
-

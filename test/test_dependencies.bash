@@ -13,9 +13,9 @@ check_depend() {
 	local the_command
 	the_command="$1"
 	if hash "$the_command" 2>/dev/null; then
-        echo " - (OK) dependency check .... $the_command exists."
+        echo " - (OK) dependency check .... '$the_command' exists."
     else
-    	(>&2 echo " - (FAIL) dependency check ... $the_command was not found.")
+    	(>&2 echo " - (FAIL) dependency check ... '$the_command' was not found.")
         CHECK_FAILED=true
     fi
 }
@@ -23,9 +23,15 @@ check_depend() {
 # ##################################################################
 # CHECKS
 # ##################################################################
-check_depend ifconfig
+check_depend /sbin/ifconfig
 check_depend ssh
 check_depend sftp
+check_depend tar
+check_depend find
+check_depend uname
+check_depend date
+check_depend psql
+check_depend pg_dump
 
 
 # ##################################################################

@@ -5,6 +5,11 @@ from AndroidRequestsBackups.jobs import *
 import subprocess
 
 class AndroidRequestsBackupsTest(SimpleTestCase):
+    """
+    HINT: these tests does not require the database, so you can
+    run them as follow (to avoid the database setting up time):
+     > python manage.py test -k AndroidRequestsBackups
+    """
 
     def setUp(self):
         """ set variables in settings.py to test commands """
@@ -18,8 +23,6 @@ class AndroidRequestsBackupsTest(SimpleTestCase):
         self.remote_host     = settings.ANDROID_REQUESTS_BACKUPS_REMOTE_HOST
         self.secret_key      = settings.ANDROID_REQUESTS_BACKUPS_SECRET_KEY
         self.remote_bkp_fldr = settings.ANDROID_REQUESTS_BACKUPS_REMOTE_BKP_FLDR
-
-
 
     def test_0_dependencies(self):
         command = "bash " + self.app_path + "test/test_dependencies.bash"
