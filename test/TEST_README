@@ -4,7 +4,6 @@ TODO:
 
   ssh ---> sftp
 
-- no enviar archivo al home, sino que al backup_folder/test
 - revisar dump.sh y loaddata.sh, en busca de cosas testeables
 
 - carpetas y archivos "writables" o "readables"
@@ -32,8 +31,6 @@ ON (TRANSAPP)
 	- tar
 	- ...
 
-- ssh connection to real viz server
-- sftp connection to real server
 - permisions
 
 
