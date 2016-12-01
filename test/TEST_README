@@ -1,9 +1,19 @@
 
-
-
 TODO:
-no enviar archivo al home, sino que al backup_folder/test
+- crear test suite que corra los scripts en orden
 
+  ssh ---> sftp
+
+- no enviar archivo al home, sino que al backup_folder/test
+- revisar dump.sh y loaddata.sh, en busca de cosas testeables
+
+- carpetas y archivos "writables" o "readables"
+if [ -r "$FILE" ]; then
+	echo "File is readable"
+fi
+if [ -w "$FILE" ]; then
+	echo "File or Folder is writable"
+fi
 
 
 
