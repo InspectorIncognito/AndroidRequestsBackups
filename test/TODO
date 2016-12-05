@@ -1,0 +1,6 @@
+
+tests:
+- correr loaddata.sh partial
+- correr loaddata.sh complete
+# todo: check dumps y vars solo en server
+# todo: check loads y vars solo en remote

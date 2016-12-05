@@ -212,6 +212,83 @@ sudo -u root python manage.py crontab show
 
 ## Testing
 
+### Overview
+
+The AndroidRequestsBackups also implements some testing routines, following the django unit testing scheme. It is recommended to put this tests on a continuous integration server, so you can notice early when the backup process brokens.
+
+Tests are managed via the `tests.py`. The underlying implementation of some of them is in bash scripts, under the `tests` folder. At the moment, the following tests are provided:
+- check if bash dependencies are installed
+- check if `settings.py` defines the required parameters.
+- attempt to connect to the (TranSappViz) server through ssh, and run a script there
+- attempt to connect to the (TranSappViz) server through sftp, and put a dummy file there
+- perform a complete dump and send it to localhost
+- perform a partial dump and send it to localhost
+- (NOT IMPLEMENTED YET) perform a complete loaddata from localhost dummy backup files
+- (NOT IMPLEMENTED YET) perform a partial loaddata from localhost dummy backup files
+
+
+### Prerequisites
+
+#### `settings.py`
+
+Some tests require you have properly set the following variables on settings.py file:
+
+```bash
+# user used to connect to localhost. Tipically this is yourself.
+# just call `$echo $USER` on a bash shell.
+ANDROID_REQUESTS_BACKUPS_THIS_USER_TEST      = "server"
+
+# full path to where place the testing junk. The files will be written onto
+# the ANDROID_REQUESTS_BACKUPS_THIS_USER_HOME_TEST/bkps/test folder.
+ANDROID_REQUESTS_BACKUPS_THIS_USER_HOME_TEST = "/home/server"
+```
+
+#### KEYS
+
+Tests assume your user (identified by the `ANDROID_REQUESTS_BACKUPS_PRIVATE_KEY` key file) is able to connect to the (TranSappViz) server and to localhost. 
+
+In order to connect to localhost, you must add the related public key to the `~/.ssh/authorized_keys` registry:
+```bash
+$ cd
+$ cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+$ cat ~/.ssh/authorized_keys  # obs: make sure the key was be pasted on a new
+                              # line!, so you not break the registry.
+```
+
+Also, this key must be used at least once!, to prevent raising a shell prompt asking whether you want to add your own fingerprint. Just try a ssh localhost connection and accept when prompted:
+```bash
+$ ssh <your_user>@localhost -i ~/.ssh/id_rsa
+```
+
+
+#### Permissions
+
+Also, make sure you have permissions to write to the `ANDROID_REQUESTS_BACKUPS_THIS_USER_HOME_TEST/bkps/test` folder, otherwise, almost every test will fail.
+```bash
+$ ls -la      # check permissions
+$ sudo mkdir -p <folder>        # create it 
+$ sudo chown -R <your_user> <folder> # change the owner to your user 
+```
+
+
+### Real Testing
+
+#### Standalone
+
+These tests does not require the database to have a certain state, so you can run them as follows (to avoid the database setting up time):
+```bash
+$ sudo -u root python manage.py test -k AndroidRequestsBackups
+```
+note the root impersonating code. It is required to be able to performs some stuff, like `pg_dump` and database loads with `psql`.
+
+
+#### Integrated
+
+Just call the django testing procedure (as root!)
+```bash
+$ sudo -u root python manage.py test
+```
+
 
 
 ## Future Work

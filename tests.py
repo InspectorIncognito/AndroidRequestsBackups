@@ -25,15 +25,18 @@ class AndroidRequestsBackupsTest(SimpleTestCase):
     def tearDown(self):
         pass
 
-    def test_0_dependencies(self):
-        self.assertTrue(settings.CRONTAB_LOCK_JOBS)
-        self.assertEqual(settings.CRONTAB_COMMAND_SUFFIX, "2>&1")
-
     def test_1_dependencies(self):
         command = "bash " + self.app_path + "test/test_dependencies.bash"
         self.assertEqual(0, subprocess.call(command, shell=True))
 
     def test_2_settings(self):
+        # dependencies settings
+        self.assertTrue(hasattr(settings, 'CRONTAB_LOCK_JOBS'))
+        self.assertTrue(hasattr(settings, 'CRONTAB_COMMAND_SUFFIX'))
+        self.assertTrue(settings.CRONTAB_LOCK_JOBS)
+        self.assertEqual(settings.CRONTAB_COMMAND_SUFFIX, "2>&1")
+
+        # this app settings
         self.assertTrue(isinstance(int(settings.ANDROID_REQUESTS_BACKUPS_TIME), int))
         self.assertTrue(os.path.isabs(settings.ANDROID_REQUESTS_BACKUPS_REMOTE_BKP_FLDR))
 
