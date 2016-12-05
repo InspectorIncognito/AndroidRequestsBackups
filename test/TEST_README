@@ -1,16 +1,38 @@
 
+
 TODO:
-- revisar dump.sh y loaddata.sh, en busca de cosas testeables
+- instrucciones sobre requerimientos para correr los tests
+.. ej: key existe, key es autorizada a si mismo, key ya fue usada por primera vez y agregada como util.
+	cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+	ssh mpavez@localhost -i .ssh/id_rsa
 
-- carpetas y archivos "writables" o "readables"
-if [ -r "$FILE" ]; then
-	echo "File is readable"
-fi
-if [ -w "$FILE" ]; then
-	echo "File or Folder is writable"
-fi
+	# en el mismo server
+	sudo mkdir -p bkps
+	sudo chown -R server bkps
+	
+
+	sudo -u root python manage.py test -k AndroidRequestsBackups
+
+	# testing
+	ANDROID_REQUESTS_BACKUPS_THIS_USER_TEST      = "server"
+	ANDROID_REQUESTS_BACKUPS_THIS_USER_HOME_TEST = "/home/server"
 
 
-
-cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-ssh mpavez@localhost -i .ssh/id_rsa
+tests:
+- ver forma correcta de NO modificar settings.py
+- ejecucion por root
+- malos parametros deben ser rechazados
+	- SERVER_FLDR      : full path
+	- REMOTE_USER      : regex
+	- REMOTE_HOST      : ip
+	- REMOTE_BKP_FLDR  : full path
+	- PRIVATE_KEY      : full path
+	- TMP_BKP_FLDR     : full path
+	- IMGS_FLDR        : full path
+	- DATABASE_NAME    : regex
+	- BKP_TYPE         : regex
+	- PARTIAL_BKP_TIME : regex
+	- BACKUP_FOLDER    : full path
+	- BKPS_LIFETIME    : regex
+- correr loaddata.sh partial
+- correr loaddata.sh complete

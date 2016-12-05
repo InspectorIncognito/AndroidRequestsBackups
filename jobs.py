@@ -15,7 +15,7 @@ def _run_script(filename, args=[]):
         command += " " + arg
 
     # call
-    subprocess.call(command, shell=True)
+    return subprocess.call(command, shell=True)
 
 
 def _retrieve_dump_params():
@@ -58,7 +58,7 @@ def _retrieve_load_params():
 def complete_dump():
     filename, params = _retrieve_dump_params()
     params.append("complete")
-    _run_script(filename, params)
+    return _run_script(filename, params)
 
 
 def partial_dump():
@@ -66,7 +66,7 @@ def partial_dump():
         filename, params = _retrieve_dump_params()
         params.append("partial")
         params.append(settings.ANDROID_REQUESTS_BACKUPS_TIME)
-        _run_script(filename, params)
+        return _run_script(filename, params)
 
     except Exception as e:
         _print_param_exception()
@@ -78,7 +78,7 @@ def complete_loaddata():
         filename, params = _retrieve_load_params()
         params.append(settings.ANDROID_REQUESTS_BACKUPS_BKPS_LIFETIME)
         params.append("complete")
-        _run_script(filename, params)
+        return _run_script(filename, params)
 
     except Exception as e:
         _print_param_exception()
@@ -91,7 +91,7 @@ def partial_loaddata():
         params.append("1")       # keep backups at most one day
         params.append("partial")
         params.append(settings.ANDROID_REQUESTS_BACKUPS_TIME)
-        _run_script(filename, params)
+        return _run_script(filename, params)
 
     except Exception as e:
         _print_param_exception()
