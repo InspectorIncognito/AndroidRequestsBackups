@@ -1,14 +1,15 @@
 #!/bin/bash
+#
+# test/test_remote.bash
+#
+# it's a shortcut for calling the tests which interact with a remote machine
+# it is important to call them in order: ssh -> sftp, as the ssh script will 
+# create the required folder for sftp to work ok.
 
 REMOTE_USER="$1"
 REMOTE_HOST="$2"
 PRIVATE_KEY="$3"
 BACKUP_FOLDER="$4"
-# REMOTE_USER="mpavez"
-# REMOTE_HOST="localhost"
-# PRIVATE_KEY="/home/mpavez/.ssh/id_rsa"
-# BACKUP_FOLDER="/home/mpavez/bkps/test"
-
 
 echo ""
 echo ""

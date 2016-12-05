@@ -1,10 +1,11 @@
 import subprocess
-import os
 from django.conf import settings
+
 
 def _print_param_exception():
     print("MISSING SOME PARAMETERS FROM settings.py. MAKE SURE ALL " +
           "REQUIRED ANDROID_REQUESTS_BACKUPS_ STUFF EXISTS.")
+
 
 def _run_script(filename, args=[]):
 
@@ -54,6 +55,7 @@ def _retrieve_load_params():
     except Exception as e:
         _print_param_exception()
         raise e
+
 
 def complete_dump():
     filename, params = _retrieve_dump_params()

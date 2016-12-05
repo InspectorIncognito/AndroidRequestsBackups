@@ -13,12 +13,7 @@ REMOTE_USER="$1"
 REMOTE_HOST="$2"
 PRIVATE_KEY="$3"
 BACKUP_FOLDER="$4"
-# REMOTE_USER="mpavez"
-# REMOTE_HOST="localhost"
-# PRIVATE_KEY="/home/mpavez/.ssh/id_rsa"
-# BACKUP_FOLDER="/home/mpavez/bkps/test"
 
-# settings
 echo ""
 echo " AndroidRequestBackups test: sftp upload to the remote visualization server"
 echo " -----------------------------------------------------------------------------"

@@ -1,5 +1,9 @@
 #!/bin/bash
-
+#
+# test/test_dependencies.bash
+#
+# it checks whether the required dependencies are installed or not.
+#
 
 echo ""
 echo ""
