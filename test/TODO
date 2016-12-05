@@ -4,3 +4,5 @@ tests:
 - correr loaddata.sh complete
 # todo: check dumps y vars solo en server
 # todo: check loads y vars solo en remote
+
+test_remote a un cron, que envie mails a felipe.
