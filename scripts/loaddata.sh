@@ -25,6 +25,10 @@ if [ ! -d "$SERVER_FLDR" ]; then
 	echo "SERVER_FLDR folder does not exists: $SERVER_FLDR"
 	exit 1
 fi
+if [ ! -r "$SERVER_FLDR" ]; then
+	echo "SERVER_FLDR folder exists, but is not readable: $SERVER_FLDR"
+	exit 1
+fi
 echo "  > SERVER_FLDR: $SERVER_FLDR"
 
 BACKUP_FOLDER="$2"
@@ -36,6 +40,10 @@ if [ -z "$BACKUP_FOLDER" ]; then
 fi
 if [ ! -d "$BACKUP_FOLDER" ]; then
 	echo "Backup folder not found: $BACKUP_FOLDER"
+	exit 1
+fi
+if [ ! -w "$BACKUP_FOLDER" ]; then
+	echo "BACKUP_FOLDER folder exists, but is not writable: $BACKUP_FOLDER"
 	exit 1
 fi
 echo "  > BACKUP_FOLDER: $BACKUP_FOLDER"
@@ -148,6 +156,10 @@ if [ ! -e "$MANAGE_PY" ]; then
 	echo "MANAGE.PY file not found: $MANAGE_PY"
 	exit 1
 fi
+if [ ! -r "$MANAGE_PY" ]; then
+	echo "MANAGE.PY file found, but not readable: $MANAGE_PY"
+	exit 1
+fi
 
 ## manage.py works well
 python "$MANAGE_PY" 2>/dev/null 1>/dev/null
@@ -160,6 +172,10 @@ fi
 mkdir -p "$IMGS_FLDR"
 if [ ! -d "$IMGS_FLDR" ]; then
 	echo "Destination folder for backup images not found: $IMGS_FLDR"
+	exit 1
+fi
+if [ ! -w "$IMGS_FLDR" ]; then
+	echo "Destination folder for backup images exists, but is not writable: $IMGS_FLDR"
 	exit 1
 fi
 
@@ -209,9 +225,11 @@ done
 # delete old stuff older than N days
 echo " - deleting files older than $BKPS_LIFETIME days on $BACKUP_FOLDER"
 if [ -d "$BACKUP_FOLDER" ]; then
-	cd "$BACKUP_FOLDER"
-	greater_than_days=$(( ${BKPS_LIFETIME} - 1 ))
-	find "$BACKUP_FOLDER" -ctime "+$greater_than_days" -type f -delete
+	if [ -w "$BACKUP_FOLDER" ]; then
+		cd "$BACKUP_FOLDER"
+		greater_than_days=$(( ${BKPS_LIFETIME} - 1 ))
+		find "$BACKUP_FOLDER" -ctime "+$greater_than_days" -type f -delete
+	fi
 fi
 
 echo " - looking for new $BKP_TYPE backup file"

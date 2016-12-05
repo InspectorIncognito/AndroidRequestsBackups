@@ -25,6 +25,10 @@ if [ ! -d "$SERVER_FLDR" ]; then
 	echo "SERVER_FLDR folder does not exists: $SERVER_FLDR"
 	exit 1
 fi
+if [ ! -r "$SERVER_FLDR" ]; then
+	echo "SERVER_FLDR folder exists but is not readable: $SERVER_FLDR"
+	exit 1
+fi
 echo "  > SERVER_FLDR: $SERVER_FLDR"
 
 REMOTE_USER="$2"
@@ -62,6 +66,10 @@ if [ -z "$PRIVATE_KEY" ]; then
 fi
 if [ ! -e "$PRIVATE_KEY" ]; then
 	echo "The PRIVATE_KEY key file does not exists: $PRIVATE_KEY"
+	exit 1
+fi
+if [ ! -r "$PRIVATE_KEY" ]; then
+	echo "PRIVATE_KEY file exists but is not readable: $PRIVATE_KEY"
 	exit 1
 fi
 echo "  > PRIVATE_KEY: $PRIVATE_KEY"
@@ -179,7 +187,11 @@ if [ ! -d "$VIZ_APP_FLDR" ]; then
 	exit 1
 fi
 if [ ! -d "$IMGS_FLDR" ]; then
-	echo " - server images not found at: $IMGS_FLDR"
+	echo " - server images folder not found at: $IMGS_FLDR"
+	exit 1
+fi
+if [ ! -r "$IMGS_FLDR" ]; then
+	echo " - server images folder exists, but is not readable: $IMGS_FLDR"
 	exit 1
 fi
 

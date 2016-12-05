@@ -21,6 +21,11 @@ if [ ! -e "$MANAGE_PY" ]; then
 	echo "MANAGE.PY file not found: $MANAGE_PY"
 	exit 1
 fi
+if [ ! -r "$MANAGE_PY" ]; then
+	echo "MANAGE.PY exists, but is not readable."
+	exit 1
+fi
+
 
 ## manage.py works well
 cd "$BACKUP_FOLDER"
