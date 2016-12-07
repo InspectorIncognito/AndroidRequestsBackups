@@ -64,18 +64,6 @@ class AndroidRequestsBackupsTest(SimpleTestCase):
         # how to test this?
         # ANDROID_REQUESTS_BACKUPS_THIS_USER_TEST = "server"
 
-    # @override_settings(ANDROID_REQUESTS_BACKUPS_REMOTE_BKP_FLDR=settings.ANDROID_REQUESTS_BACKUPS_REMOTE_BKP_FLDR + "/test")
-    # def test_3_remote(self):
-    #     command = "bash " + self.app_path + "test/test_remote.bash"
-    #     args  = " " + settings.ANDROID_REQUESTS_BACKUPS_REMOTE_USER
-    #     args += " " + settings.ANDROID_REQUESTS_BACKUPS_REMOTE_HOST
-    #     args += " " + settings.ANDROID_REQUESTS_BACKUPS_PRIVATE_KEY
-    #     args += " " + settings.ANDROID_REQUESTS_BACKUPS_REMOTE_BKP_FLDR
-
-    #     ret_val = subprocess.call(command + args, shell=True)
-    #     self.assertEqual(0, ret_val)
-    #     # pass
-
     @override_settings(ANDROID_REQUESTS_BACKUPS_REMOTE_HOST='localhost')
     @override_settings(ANDROID_REQUESTS_BACKUPS_TMP_BKP_FLDR=settings.ANDROID_REQUESTS_BACKUPS_TMP_BKP_FLDR + "_test")
     def test_4_complete_dump(self):

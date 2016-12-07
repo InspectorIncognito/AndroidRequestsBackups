@@ -15,6 +15,7 @@ echo ""
 echo ""
 echo " # AndroidRequestBackups test: remote connection to (TranSappViz)"
 echo " # #############################################################################"
+echo " - date: $(date)"
 
 if [ -z "$REMOTE_USER"   ]; then (>&2 echo " - (FAIL) Required parameter REMOTE_USER"  ) ; exit 1; fi
 if [ -z "$REMOTE_HOST"   ]; then (>&2 echo " - (FAIL) Required parameter REMOTE_HOST"  ) ; exit 1; fi
@@ -38,4 +39,6 @@ bash "test_ssh_to_remote.bash" "$REMOTE_USER" "$REMOTE_HOST" "$PRIVATE_KEY" "$BA
 cd "$THIS_FOLDER"
 bash "test_sftp_to_remote.bash" "$REMOTE_USER" "$REMOTE_HOST" "$PRIVATE_KEY" "$BACKUP_FOLDER" 
 
+echo ""
+echo " - finished: $(date)"
 exit 0

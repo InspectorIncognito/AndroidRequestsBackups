@@ -1,6 +1,7 @@
 import subprocess
+import datetime
 from django.conf import settings
-
+from django.core.mail import mail_admins
 
 def _print_param_exception():
     print("MISSING SOME PARAMETERS FROM settings.py. MAKE SURE ALL " +
@@ -17,7 +18,6 @@ def _run_script(filename, args=[]):
 
     # call
     return subprocess.call(command, shell=True)
-
 
 def _retrieve_dump_params():
     try:
@@ -98,3 +98,45 @@ def partial_loaddata():
     except Exception as e:
         _print_param_exception()
         raise e
+
+
+def ssh_sftp_checker():
+    app_path = settings.BASE_DIR + "/AndroidRequestsBackups/"
+    command = "bash " + app_path + "test/test_remote.bash"
+    args  = " " + settings.ANDROID_REQUESTS_BACKUPS_REMOTE_USER
+    args += " " + settings.ANDROID_REQUESTS_BACKUPS_REMOTE_HOST
+    args += " " + settings.ANDROID_REQUESTS_BACKUPS_PRIVATE_KEY
+    args += " " + settings.ANDROID_REQUESTS_BACKUPS_REMOTE_BKP_FLDR + "/test"
+
+    ret_val = subprocess.call(command + args, shell=True)
+    if ret_val == 0:
+        # we are done
+        return
+
+    # something failed, sending email
+    subject  = "Warning!: AndroidRequestsBackups connectivity check has failed."
+    message  = "Dear admins,\n"
+    message += "\n"
+    message += "With date %s, " % datetime.datetime.now().isoformat()
+    message += "the AndroidRequestsBackups test for ssh and sftp connectivity "
+    message += "has failed. This test attempts to stablish a ssh connection "
+    message += "from the (TranSapp) to the (TranSappViz) server, and run a "
+    message += "script on the remote. Then it stablishes an sftp connection to "
+    message += "send a dummy file to the remote.\n"
+    message += "\n"
+    message += "\n"
+    message += "Please, inspect the related log file, defined on the "
+    message += "settings.py file. See the CRONJOBS variable. E.G: Run the "
+    message += "following on the server:\n"
+    message += "$ cat /tmp/android_request_bkps_ssh_sftp_checker_log.txt\n"
+    message += "\n"
+    message += "Bye.\n"
+    message += "\n"
+    try:
+        mail_admins(subject, message, fail_silently=True)
+    except Exception as e:
+        print "Failed to send the email message"
+        print "subject: " + subject
+        print "message: "
+        print message
+
