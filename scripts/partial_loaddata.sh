@@ -42,4 +42,6 @@ else
     echo " - no images found"
 fi
 
-python "$SERVER_FLDR/transform.py" "$BACKUP_FILE_NOT_FULL" "$PARTIAL_BKP_TIME"
+if [ -r "$SERVER_FLDR/transform.py" ]; then
+	python "$SERVER_FLDR/transform.py" "$BACKUP_FILE_NOT_FULL" "$PARTIAL_BKP_TIME"
+fi

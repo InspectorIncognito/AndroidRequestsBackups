@@ -243,7 +243,8 @@ oldest_not_used="${files[0]}"
 
 if [ -z "$oldest_not_used" ] || [ ! -e "$oldest_not_used" ]; then
 	echo " - There are not new backup files to load on $BACKUP_FOLDER. Bye"
-	exit_and_free
+	free_mutex
+	exit 0
 fi
 echo " - using oldest backup file: $oldest_not_used"
 
