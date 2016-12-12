@@ -9,7 +9,7 @@ def _print_param_exception():
           "REQUIRED ANDROID_REQUESTS_BACKUPS FIELDS EXISTS.")
 
 
-def _run_script(filename, args=[]):
+def _run_script(filename, short_desc, args=[]):
 
     # build command
     app_path = settings.BASE_DIR + "/AndroidRequestsBackups/"
@@ -18,8 +18,73 @@ def _run_script(filename, args=[]):
         command += " " + arg
 
     # call
-    return subprocess.call(command, shell=True)
+    ret_val = subprocess.call(command, shell=True)
 
+    app_path = settings.BASE_DIR + "/AndroidRequestsBackups/"
+    command = "bash " + app_path + "test/test_remote.bash"
+    args = " " + settings.ANDROID_REQUESTS_BACKUPS['REMOTE_USER']
+    args += " " + settings.ANDROID_REQUESTS_BACKUPS['REMOTE_HOST']
+    args += " " + settings.ANDROID_REQUESTS_BACKUPS['PRIVATE_KEY']
+    args += " " + settings.ANDROID_REQUESTS_BACKUPS['REMOTE_BKP_FLDR'] + "/test"
+
+    ret_val = subprocess.call(command + args, shell=True)
+    if ret_val != 0:
+
+        # something failed, sending email
+        subject = "Warning!: An AndroidRequestsBackups job has failed: " + short_desc.upper()
+        message = "Dear admins,\n"
+        message += "\n"
+        message += "With date %s, " % datetime.datetime.now().isoformat()
+        message += "a scheduled AndroidRequestsBackups job has failed.\n"
+        message += "\n"
+        message += "FAILING JOB: " + short_desc.upper() + "\n"
+        message += "\n"
+        message += "\n"
+        message += "Please, inspect the related log file, as the CRONJOBS "
+        message += "variable defines on the settings.py file.\n"
+        message += "\n"
+        message += "e.g: Run the following on (TranSapp):\n"
+        message += " $ cat /tmp/android_request_bkps_complete_dump_log.txt\n"
+        message += " $ cat /tmp/android_request_bkps_partial_dump_log.txt\n"
+        message += "\n"
+        message += "e.g: Run the following on (TranSappViz):\n"
+        message += " $ cat /tmp/android_request_bkps_complete_loaddata_log.txt\n"
+        message += " $ cat /tmp/android_request_bkps_partial_loaddata_log.txt\n"
+        message += "\n"
+        message += "\n"
+        message += "Description by job type:\n"
+        message += "------------------------------------------------\n"
+        message += " - dump: This job runs on the (TranSapp) server. It "
+        message += "attempts to perform a database backup and send it to "
+        message += "the (TranSappViz) server.\n"
+        message += " - loaddata: This job runs on the (TranSappViz) server. "
+        message += "It attempts to perform a database load from (TranSapp) "
+        message += "backups and run the related transformations.\n"
+        message += "\n"
+        message += "\n"
+        message += "Description by job version:\n"
+        message += "---------------------------------------------------\n"
+        message += " - complete: This jobs work with the whole database, "
+        message += "performing a full dump and load. This jobs are tipically "
+        message += "scheduled to run once a day.\n"
+        message += " - partial: This jobs work with a small amount of "
+        message += "records, tipically only new or modified ones and up to "
+        message += "the last N minutes. It performs small dumps and loads. "
+        message += "This jobs are tipically scheduled to run every 5 minutes.\n"
+        message += "\n"
+        message += "\n"
+        message += "Bye.\n"
+        message += "\n"
+        mail_admins(subject, message, fail_silently=True)
+        
+        print "---"
+        print "Emailed message"
+        print "subject: " + subject
+        print "message: "
+        print message
+        print "---"
+
+    return ret_val
 
 def _retrieve_dump_params():
     try:
@@ -62,7 +127,7 @@ def _retrieve_load_params():
 def complete_dump():
     filename, params = _retrieve_dump_params()
     params.append("complete")
-    return _run_script(filename, params)
+    return _run_script(filename, "complete dump", params)
 
 
 def partial_dump():
@@ -70,7 +135,7 @@ def partial_dump():
         filename, params = _retrieve_dump_params()
         params.append("partial")
         params.append(settings.ANDROID_REQUESTS_BACKUPS['TIME'])
-        return _run_script(filename, params)
+        return _run_script(filename, "partial dump", params)
 
     except Exception as e:
         _print_param_exception()
@@ -82,7 +147,7 @@ def complete_loaddata():
         filename, params = _retrieve_load_params()
         params.append(settings.ANDROID_REQUESTS_BACKUPS['BKPS_LIFETIME'])
         params.append("complete")
-        return _run_script(filename, params)
+        return _run_script(filename, "complete loaddata", params)
 
     except Exception as e:
         _print_param_exception()
@@ -95,7 +160,7 @@ def partial_loaddata():
         params.append("1")       # keep backups at most one day
         params.append("partial")
         params.append(settings.ANDROID_REQUESTS_BACKUPS['TIME'])
-        return _run_script(filename, params)
+        return _run_script(filename, "partial loaddata", params)
 
     except Exception as e:
         _print_param_exception()
@@ -135,3 +200,10 @@ def ssh_sftp_checker():
     message += "Bye.\n"
     message += "\n"
     mail_admins(subject, message, fail_silently=True)
+    print "---"
+    print "Emailed message"
+    print "subject: " + subject
+    print "message: "
+    print message
+    print "---"
+
