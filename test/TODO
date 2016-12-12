@@ -4,27 +4,27 @@ listar tareas pendientes
 
 0- coregir temas de travis
 1- mail a felipe en caso de falla de load o dump
-2- test_remote a un cron, que envie mails a felipe.
+2- (DONE) test_remote a un cron, que envie mails a felipe.
 3- test complete loaddata en remote
 4- test partial loaddata en remote
 5- que prueben las instrucciones
 6- Recomendaciones: 
        aplicar migraciones a ambos modelos
-
+7- (DONE) settings.py, externalizar configs a secret file. 
 
 
 limitar cosas que alcanzo a hacer
 ///////////////////////////////////
 
 Sesiones restantes (de 4 hrs)
-1.- hoy: 1, 2
-2.- jue: 1, 2
+1.- hoy: 1, 2(OK), 7 (OK)
+2.- jue: 1, 2(OK),
 3.- vie: 0 + 3 + 4
 4.- lun: 0 + 3 + 4
 5.- mar: ENTREGA + 5 + 6
 6.- mie: Correcciones
 7.- jue: DEMO
-8.- jue: DEMO
+8.- vie: DEMO
 
 
 
