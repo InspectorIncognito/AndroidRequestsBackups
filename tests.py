@@ -49,8 +49,8 @@ class AndroidRequestsBackupsTest(SimpleTestCase):
         if hasattr(settings, 'ANDROID_REQUESTS_BACKUPS') and 'BKPS_LIFETIME' in settings.ANDROID_REQUESTS_BACKUPS:
             self.assertTrue(isinstance(int(settings.ANDROID_REQUESTS_BACKUPS['BKPS_LIFETIME']), int))
 
-        if hasattr(settings, 'ANDROID_REQUESTS_BACKUPS') and 'THIS_USER_HOME_TEST' in settings.ANDROID_REQUESTS_BACKUPS:
-            self.assertTrue(os.path.isabs(settings.ANDROID_REQUESTS_BACKUPS['THIS_USER_HOME_TEST']))
+        if hasattr(settings, 'ANDROID_REQUESTS_BACKUPS') and 'TEST_USER_HOME' in settings.ANDROID_REQUESTS_BACKUPS:
+            self.assertTrue(os.path.isabs(settings.ANDROID_REQUESTS_BACKUPS['TEST_USER_HOME']))
 
         # how to test this?
         # ANDROID_REQUESTS_BACKUPS['REMOTE_HOST'] = "104.236.183.105"
@@ -62,40 +62,90 @@ class AndroidRequestsBackupsTest(SimpleTestCase):
         # DATABASE_NAME = "@as1^^&!invalid>>dfghjkl"
 
         # how to test this?
-        # ANDROID_REQUESTS_BACKUPS['THIS_USER_TEST'] = "server"
+        # ANDROID_REQUESTS_BACKUPS['TEST_USER'] = "server"
 
     def test_4_complete_dump(self):
-        self.assertTrue('THIS_USER_TEST' in settings.ANDROID_REQUESTS_BACKUPS)
-        self.assertTrue('THIS_USER_HOME_TEST' in settings.ANDROID_REQUESTS_BACKUPS)
-
+        # assert params
         test_settings = settings.ANDROID_REQUESTS_BACKUPS
+        if (
+            'REMOTE_USER' not in test_settings or
+            'REMOTE_HOST' not in test_settings or
+            'REMOTE_BKP_FLDR' not in test_settings or
+            'PRIVATE_KEY' not in test_settings or
+            'TMP_BKP_FLDR' not in test_settings or
+            'TIME' not in test_settings
+        ):
+            # return if missing parameters
+            return
+
+        self.assertTrue('TEST_USER' in settings.ANDROID_REQUESTS_BACKUPS)
+        self.assertTrue('TEST_USER_HOME' in settings.ANDROID_REQUESTS_BACKUPS)
+
+        # real test
         test_settings['REMOTE_HOST'] = 'localhost'
         test_settings['TMP_BKP_FLDR'] = settings.ANDROID_REQUESTS_BACKUPS['TMP_BKP_FLDR'] + "_test"
-        test_settings['REMOTE_BKP_FLDR'] = settings.ANDROID_REQUESTS_BACKUPS['THIS_USER_HOME_TEST'] + "/bkps/test"
-        test_settings['REMOTE_USER'] = settings.ANDROID_REQUESTS_BACKUPS['THIS_USER_TEST']
+        test_settings['REMOTE_BKP_FLDR'] = settings.ANDROID_REQUESTS_BACKUPS['TEST_USER_HOME'] + "/bkps/test"
+        test_settings['REMOTE_USER'] = settings.ANDROID_REQUESTS_BACKUPS['TEST_USER']
         with self.settings(ANDROID_REQUESTS_BACKUPS=test_settings):
             ret_val = jobs.complete_dump()
             self.assertEqual(0, ret_val)
 
     def test_5_partial_dump(self):
-        self.assertTrue('THIS_USER_TEST' in settings.ANDROID_REQUESTS_BACKUPS)
-        self.assertTrue('THIS_USER_HOME_TEST' in settings.ANDROID_REQUESTS_BACKUPS)
-
+        # assert params
         test_settings = settings.ANDROID_REQUESTS_BACKUPS
+        if (
+            'REMOTE_USER' not in test_settings or
+            'REMOTE_HOST' not in test_settings or
+            'REMOTE_BKP_FLDR' not in test_settings or
+            'PRIVATE_KEY' not in test_settings or
+            'TMP_BKP_FLDR' not in test_settings or
+            'TIME' not in test_settings
+        ):
+            # return if missing parameters
+            return
+        self.assertTrue('TEST_USER' in settings.ANDROID_REQUESTS_BACKUPS)
+        self.assertTrue('TEST_USER_HOME' in settings.ANDROID_REQUESTS_BACKUPS)
+
+        # real test
         test_settings['REMOTE_HOST'] = 'localhost'
         test_settings['TMP_BKP_FLDR'] = settings.ANDROID_REQUESTS_BACKUPS['TMP_BKP_FLDR'] + "_test"
-        test_settings['REMOTE_BKP_FLDR'] = settings.ANDROID_REQUESTS_BACKUPS['THIS_USER_HOME_TEST'] + "/bkps/test"
-        test_settings['REMOTE_USER'] = settings.ANDROID_REQUESTS_BACKUPS['THIS_USER_TEST']
+        test_settings['REMOTE_BKP_FLDR'] = settings.ANDROID_REQUESTS_BACKUPS['TEST_USER_HOME'] + "/bkps/test"
+        test_settings['REMOTE_USER'] = settings.ANDROID_REQUESTS_BACKUPS['TEST_USER']
         with self.settings(ANDROID_REQUESTS_BACKUPS=test_settings):
             ret_val = jobs.partial_dump()
             self.assertEqual(0, ret_val)
 
     def test_6_complete_loaddata(self):
-        # ret_val = jobs.complete_loaddata()
-        # self.assertEqual(0, ret_val)
-        pass
+        # assert params
+        test_settings = settings.ANDROID_REQUESTS_BACKUPS
+        if (
+            'REMOTE_BKP_FLDR' not in test_settings or
+            'BKPS_LIFETIME' not in test_settings or
+            'TIME' not in test_settings
+        ):
+            # return if missing parameters
+            return
+        self.assertTrue('TEST_USER_HOME' in settings.ANDROID_REQUESTS_BACKUPS)
+
+        # real test
+        test_settings['REMOTE_BKP_FLDR'] = settings.ANDROID_REQUESTS_BACKUPS['TEST_USER_HOME'] + "/bkps/test"
+        with self.settings(ANDROID_REQUESTS_BACKUPS=test_settings):
+            ret_val = jobs.complete_loaddata()
+            self.assertEqual(0, ret_val)
 
     def test_7_partial_loaddata(self):
-        # ret_val = partial_loaddata()
-        # self.assertEqual(0, ret_val)
-        pass
+        test_settings = settings.ANDROID_REQUESTS_BACKUPS
+        if (
+            'REMOTE_BKP_FLDR' not in test_settings or
+            'BKPS_LIFETIME' not in test_settings or
+            'TIME' not in test_settings
+        ):
+            # return if missing parameters
+            return
+        self.assertTrue('TEST_USER_HOME' in settings.ANDROID_REQUESTS_BACKUPS)
+
+        # real test
+        test_settings['REMOTE_BKP_FLDR'] = settings.ANDROID_REQUESTS_BACKUPS['TEST_USER_HOME'] + "/bkps/test"
+        with self.settings(ANDROID_REQUESTS_BACKUPS=test_settings):
+            ret_val = jobs.partial_loaddata()
+            self.assertEqual(0, ret_val)
