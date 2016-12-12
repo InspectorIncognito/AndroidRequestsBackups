@@ -124,7 +124,7 @@ def partial_dump():
     try:
         filename, params = _retrieve_dump_params()
         params.append("partial")
-        params.append(settings.ANDROID_REQUESTS_BACKUPS['TIME'])
+        params.append(str(settings.ANDROID_REQUESTS_BACKUPS['TIME']))
         return _run_script(filename, "partial dump", params)
 
     except Exception as e:
@@ -135,7 +135,7 @@ def partial_dump():
 def complete_loaddata():
     try:
         filename, params = _retrieve_load_params()
-        params.append(settings.ANDROID_REQUESTS_BACKUPS['BKPS_LIFETIME'])
+        params.append(str(settings.ANDROID_REQUESTS_BACKUPS['BKPS_LIFETIME']))
         params.append("complete")
         return _run_script(filename, "complete loaddata", params)
 
@@ -149,7 +149,7 @@ def partial_loaddata():
         filename, params = _retrieve_load_params()
         params.append("1")       # keep backups at most one day
         params.append("partial")
-        params.append(settings.ANDROID_REQUESTS_BACKUPS['TIME'])
+        params.append(str(settings.ANDROID_REQUESTS_BACKUPS['TIME']))
         return _run_script(filename, "partial loaddata", params)
 
     except Exception as e:
