@@ -8,8 +8,7 @@ listar tareas pendientes
 3- test complete loaddata en remote
 4- test partial loaddata en remote
 5- que prueben las instrucciones
-6- Recomendaciones: 
-       aplicar migraciones a ambos modelos
+6- Recomendaciones: ej. aplicar migraciones a ambos modelos
 7- (DONE) settings.py, externalizar configs a secret file. 
 
 

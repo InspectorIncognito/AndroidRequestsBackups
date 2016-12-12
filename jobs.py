@@ -19,15 +19,6 @@ def _run_script(filename, short_desc, args=[]):
 
     # call
     ret_val = subprocess.call(command, shell=True)
-
-    app_path = settings.BASE_DIR + "/AndroidRequestsBackups/"
-    command = "bash " + app_path + "test/test_remote.bash"
-    args = " " + settings.ANDROID_REQUESTS_BACKUPS['REMOTE_USER']
-    args += " " + settings.ANDROID_REQUESTS_BACKUPS['REMOTE_HOST']
-    args += " " + settings.ANDROID_REQUESTS_BACKUPS['PRIVATE_KEY']
-    args += " " + settings.ANDROID_REQUESTS_BACKUPS['REMOTE_BKP_FLDR'] + "/test"
-
-    ret_val = subprocess.call(command + args, shell=True)
     if ret_val != 0:
 
         # something failed, sending email
@@ -76,13 +67,12 @@ def _run_script(filename, short_desc, args=[]):
         message += "Bye.\n"
         message += "\n"
         mail_admins(subject, message, fail_silently=True)
-        
-        print "---"
-        print "Emailed message"
-        print "subject: " + subject
-        print "message: "
-        print message
-        print "---"
+        # print "---"
+        # print "Emailed message"
+        # print "subject: " + subject
+        # print "message: "
+        # print message
+        # print "---"
 
     return ret_val
 
@@ -198,7 +188,7 @@ def ssh_sftp_checker():
     message += "$ cat /tmp/android_request_bkps_ssh_sftp_checker_log.txt\n"
     message += "\n"
     message += "Bye.\n"
-    message += "\n"
+    message += "\n"    
     mail_admins(subject, message, fail_silently=True)
     print "---"
     print "Emailed message"
@@ -206,4 +196,3 @@ def ssh_sftp_checker():
     print "message: "
     print message
     print "---"
-

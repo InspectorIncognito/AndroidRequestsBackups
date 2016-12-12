@@ -1,4 +1,4 @@
-from django.test import SimpleTestCase, override_settings
+from django.test import SimpleTestCase
 from AndroidRequestsBackups import jobs
 from django.conf import settings
 import subprocess
@@ -40,16 +40,16 @@ class AndroidRequestsBackupsTest(SimpleTestCase):
         self.assertTrue(isinstance(int(settings.ANDROID_REQUESTS_BACKUPS['TIME']), int))
         self.assertTrue(os.path.isabs(settings.ANDROID_REQUESTS_BACKUPS['REMOTE_BKP_FLDR']))
 
-        if hasattr(settings, 'ANDROID_REQUESTS_BACKUPS') and hasattr(settings.ANDROID_REQUESTS_BACKUPS, 'TMP_BKP_FLDR'):
+        if hasattr(settings, 'ANDROID_REQUESTS_BACKUPS') and 'TMP_BKP_FLDR' in settings.ANDROID_REQUESTS_BACKUPS:
             self.assertTrue(os.path.isabs(settings.ANDROID_REQUESTS_BACKUPS['TMP_BKP_FLDR']))
 
-        if hasattr(settings, 'ANDROID_REQUESTS_BACKUPS') and hasattr(settings.ANDROID_REQUESTS_BACKUPS, 'PRIVATE_KEY'):
+        if hasattr(settings, 'ANDROID_REQUESTS_BACKUPS') and 'PRIVATE_KEY' in settings.ANDROID_REQUESTS_BACKUPS:
             self.assertTrue(os.path.isabs(settings.ANDROID_REQUESTS_BACKUPS['PRIVATE_KEY']))
 
-        if hasattr(settings, 'ANDROID_REQUESTS_BACKUPS') and hasattr(settings.ANDROID_REQUESTS_BACKUPS, 'BKPS_LIFETIME'):
+        if hasattr(settings, 'ANDROID_REQUESTS_BACKUPS') and 'BKPS_LIFETIME' in settings.ANDROID_REQUESTS_BACKUPS:
             self.assertTrue(isinstance(int(settings.ANDROID_REQUESTS_BACKUPS['BKPS_LIFETIME']), int))
 
-        if hasattr(settings, 'ANDROID_REQUESTS_BACKUPS') and hasattr(settings.ANDROID_REQUESTS_BACKUPS, 'THIS_USER_HOME_TEST'):
+        if hasattr(settings, 'ANDROID_REQUESTS_BACKUPS') and 'THIS_USER_HOME_TEST' in settings.ANDROID_REQUESTS_BACKUPS:
             self.assertTrue(os.path.isabs(settings.ANDROID_REQUESTS_BACKUPS['THIS_USER_HOME_TEST']))
 
         # how to test this?
@@ -64,29 +64,31 @@ class AndroidRequestsBackupsTest(SimpleTestCase):
         # how to test this?
         # ANDROID_REQUESTS_BACKUPS['THIS_USER_TEST'] = "server"
 
-    @override_settings(ANDROID_REQUESTS_BACKUPS_REMOTE_HOST='localhost')
-    @override_settings(ANDROID_REQUESTS_BACKUPS_TMP_BKP_FLDR=settings.ANDROID_REQUESTS_BACKUPS['TMP_BKP_FLDR'] + "_test")
     def test_4_complete_dump(self):
-        self.assertTrue(hasattr(settings, 'ANDROID_REQUESTS_BACKUPS_THIS_USER_TEST'))
-        self.assertTrue(hasattr(settings, 'ANDROID_REQUESTS_BACKUPS_THIS_USER_HOME_TEST'))
+        self.assertTrue('THIS_USER_TEST' in settings.ANDROID_REQUESTS_BACKUPS)
+        self.assertTrue('THIS_USER_HOME_TEST' in settings.ANDROID_REQUESTS_BACKUPS)
 
-        with self.settings(ANDROID_REQUESTS_BACKUPS_REMOTE_BKP_FLDR=settings.ANDROID_REQUESTS_BACKUPS['THIS_USER_HOME_TEST'] + "/bkps/test"):
-            with self.settings(ANDROID_REQUESTS_BACKUPS_REMOTE_USER=settings.ANDROID_REQUESTS_BACKUPS['THIS_USER_TEST']):
-                ret_val = jobs.complete_dump()
-                self.assertEqual(0, ret_val)
-                # pass
+        test_settings = settings.ANDROID_REQUESTS_BACKUPS
+        test_settings['REMOTE_HOST'] = 'localhost'
+        test_settings['TMP_BKP_FLDR'] = settings.ANDROID_REQUESTS_BACKUPS['TMP_BKP_FLDR'] + "_test"
+        test_settings['REMOTE_BKP_FLDR'] = settings.ANDROID_REQUESTS_BACKUPS['THIS_USER_HOME_TEST'] + "/bkps/test"
+        test_settings['REMOTE_USER'] = settings.ANDROID_REQUESTS_BACKUPS['THIS_USER_TEST']
+        with self.settings(ANDROID_REQUESTS_BACKUPS=test_settings):
+            ret_val = jobs.complete_dump()
+            self.assertEqual(0, ret_val)
 
-    @override_settings(ANDROID_REQUESTS_BACKUPS_REMOTE_HOST='localhost')
-    @override_settings(ANDROID_REQUESTS_BACKUPS_TMP_BKP_FLDR=settings.ANDROID_REQUESTS_BACKUPS['TMP_BKP_FLDR'] + "_test")
     def test_5_partial_dump(self):
-        self.assertTrue(hasattr(settings, 'ANDROID_REQUESTS_BACKUPS_THIS_USER_TEST'))
-        self.assertTrue(hasattr(settings, 'ANDROID_REQUESTS_BACKUPS_THIS_USER_HOME_TEST'))
+        self.assertTrue('THIS_USER_TEST' in settings.ANDROID_REQUESTS_BACKUPS)
+        self.assertTrue('THIS_USER_HOME_TEST' in settings.ANDROID_REQUESTS_BACKUPS)
 
-        with self.settings(ANDROID_REQUESTS_BACKUPS_REMOTE_BKP_FLDR=settings.ANDROID_REQUESTS_BACKUPS['THIS_USER_HOME_TEST'] + "/bkps/test"):
-            with self.settings(ANDROID_REQUESTS_BACKUPS_REMOTE_USER=settings.ANDROID_REQUESTS_BACKUPS['THIS_USER_TEST']):
-                ret_val = jobs.partial_dump()
-                self.assertEqual(0, ret_val)
-                # pass
+        test_settings = settings.ANDROID_REQUESTS_BACKUPS
+        test_settings['REMOTE_HOST'] = 'localhost'
+        test_settings['TMP_BKP_FLDR'] = settings.ANDROID_REQUESTS_BACKUPS['TMP_BKP_FLDR'] + "_test"
+        test_settings['REMOTE_BKP_FLDR'] = settings.ANDROID_REQUESTS_BACKUPS['THIS_USER_HOME_TEST'] + "/bkps/test"
+        test_settings['REMOTE_USER'] = settings.ANDROID_REQUESTS_BACKUPS['THIS_USER_TEST']
+        with self.settings(ANDROID_REQUESTS_BACKUPS=test_settings):
+            ret_val = jobs.partial_dump()
+            self.assertEqual(0, ret_val)
 
     def test_6_complete_loaddata(self):
         # ret_val = jobs.complete_loaddata()
