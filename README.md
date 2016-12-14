@@ -20,6 +20,7 @@ On failure, all backup jobs are configured to send an email to the server admins
 
 ### Table of contents
 
+  * [About migrations](#about-migrations)
   * [Project Setup](#project-setup)
   * [Settings](#settings)
   	* [Common Settings](#on-both-servers)
@@ -35,6 +36,10 @@ On failure, all backup jobs are configured to send an email to the server admins
   * [Future Work](#future-work)
 
 
+
+## About migrations
+
+This aplication assumes both servers use the `AndroidRequests` app, this means both databases must have the same tables (`AndroidRequests_*`) and must be consistent to each other. This can be managed by running `AndroidRequests` migrations on both servers.
 
 ## Project Setup
 
@@ -117,7 +122,7 @@ ANDROID_REQUESTS_BACKUPS['REMOTE_BKP_FLDR'] = "/home/username/bkps"
 # Amount of minutes to send to the remote (TranSappViz) server.
 # This value MUST match the one on the other server!, otherwise
 # some data can be lost
-ANDROID_REQUESTS_BACKUPS['TIME']            = "5"
+ANDROID_REQUESTS_BACKUPS['TIME']            = 5
 ```
 
 - The database name used to fetch and load data is taken from the `settings.DATABASES['default']['NAME']` variable.
@@ -147,7 +152,7 @@ ANDROID_REQUESTS_BACKUPS['REMOTE_USER']     = "username"
 # Amount of days to keep "complete backup" files. Older files are deleted.
 # This value is only valid for complete backups. Partial backups are only
 # kept for 1 day
-ANDROID_REQUESTS_BACKUPS['BKPS_LIFETIME']   = "4"
+ANDROID_REQUESTS_BACKUPS['BKPS_LIFETIME']   = 4
 ```
 
 ## Scheduling
@@ -243,17 +248,19 @@ sudo -u root python manage.py crontab show
 
 ### Overview
 
-The AndroidRequestsBackups also implements some testing routines, following the django unit testing scheme. It is recommended to put this tests on a continuous integration server, so you can notice early when the backup process brokens.
+The AndroidRequestsBackups also implements some testing routines, following the django unit testing scheme.
 
-Tests are managed via the `tests.py`. The underlying implementation of some of them is in bash scripts, under the `tests` folder. At the moment, the following tests are provided:
+It is recommended to put this tests on a continuous integration server, so you can notice early when the backup process brokens. However, this can only be made if you have complete access to the CI machine, because you will need to set up the root user keys.
+
+Tests are managed via the `tests.py` file. The underlying implementation of some of them is in bash scripts, under the `tests` folder. At the moment, the following tests are provided:
 - check if bash dependencies are installed
 - check if `settings.py` defines the required parameters.
-- attempt to connect to the (TranSappViz) server through ssh, and run a script there
-- attempt to connect to the (TranSappViz) server through sftp, and put a dummy file there
 - perform a complete dump and send it to localhost
 - perform a partial dump and send it to localhost
-- (NOT IMPLEMENTED YET) perform a complete loaddata from localhost dummy backup files
-- (NOT IMPLEMENTED YET) perform a partial loaddata from localhost dummy backup files
+- perform a complete loaddata from localhost dummy backup files
+- perform a partial loaddata from localhost dummy backup files
+
+Also there is a test implemented as a cronjob, which will attempt to connect to the (TranSappViz) server from (TranSapp), and run a simple script through ssh and sftp.
 
 
 ### Prerequisites
@@ -265,11 +272,11 @@ Some tests require you have properly set the following variables on settings.py 
 ```bash
 # user used to connect to localhost. Tipically this is yourself.
 # just call `$echo $USER` on a bash shell.
-ANDROID_REQUESTS_BACKUPS['THIS_USER_TEST']      = "server"
+ANDROID_REQUESTS_BACKUPS['TEST_USER']      = "username"
 
-# full path to where place the testing junk. The files will be written onto
-# the ANDROID_REQUESTS_BACKUPS['THIS_USER_HOME_TEST']/bkps/test folder.
-ANDROID_REQUESTS_BACKUPS['THIS_USER_HOME_TEST'] = "/home/server"
+# full path to where to place the testing junk. Files will be written onto
+# the ANDROID_REQUESTS_BACKUPS['TEST_USER_HOME']/bkps/test folder.
+ANDROID_REQUESTS_BACKUPS['TEST_USER_HOME'] = "/home/username"
 ```
 
 #### KEYS
@@ -284,44 +291,68 @@ $ cat ~/.ssh/authorized_keys  # obs: make sure the key was be pasted on a new
                               # line!, so you not break the registry.
 ```
 
-Also, this key must be used at least once!, to prevent raising a shell prompt asking whether you want to add your own fingerprint. Just try a ssh localhost connection and accept when prompted:
+Also, this key must be used at least once!, to prevent raising a shell prompt asking whether you want to add your own fingerprint. 
 ```bash
+# Just try a ssh localhost connection and accept when prompted:
 $ ssh <your_user>@localhost -i ~/.ssh/id_rsa
+
+or 
+
+# Add your own key to your known hosts
+$ ssh-keyscan -H localhost >> $HOME/.ssh/known_hosts
 ```
 
 
 #### Permissions
 
-Also, make sure you have permissions to write to the `ANDROID_REQUESTS_BACKUPS['THIS_USER_HOME_TEST']/bkps/test` folder, otherwise, almost every test will fail.
+Also, make sure you have permissions to write to the `ANDROID_REQUESTS_BACKUPS['TEST_USER_HOME']/bkps/test` folder, otherwise, almost every test will fail.
 ```bash
-$ ls -la      # check permissions
-$ sudo mkdir -p <folder>        # create it 
+$ ls -la                             # check permissions
+$ sudo mkdir -p <folder>             # create it 
 $ sudo chown -R <your_user> <folder> # change the owner to your user 
 ```
 
 
-### Real Testing
+### AND Testing
 
-#### Standalone
+#### Manual
 
-These tests does not require the database to have a certain state, so you can run them as follows (to avoid the database setting up time):
-```bash
-$ sudo -u root python manage.py test -k AndroidRequestsBackups
-```
-note the root impersonating code. It is required to be able to performs some stuff, like `pg_dump` and database loads with `psql`.
-
-
-#### Integrated
-
-Just call the django testing procedure (as root!)
+Implemented tests will only run if called with root permissions. So just calling `python manage.py test` will not suffice. Root permissions are required to be able to perform some stuff, like `pg_dump` and database loads with `psql`. You can run them like this:
 ```bash
 $ sudo -u root python manage.py test
 ```
 
+If you only want to run the AndroidRequestsBackups tests, you can take advantage that tests does not require the database to have a certain state, so you can run them as follows (to avoid the database setting up time):
+```bash
+$ sudo -u root python manage.py test -k AndroidRequestsBackups
+```
+
+#### Automated Job
+
+We also provide you a cronjob, so you can continuously check the connection state between both servers. The job will attempt to connect to the (TranSappViz) server from (TranSapp), and run a simple script through ssh and send a file through sftp.
+
+This test was designed as a job to be able to have a quick feedback when the connectivity is lost, which means your visualization server will be outdated!. On failure, it will send an email to the server admins, the same as the other jobs.
+
+This job should only run on the (TranSapp) server. Just add it to the CRONJOBS variable:
+
+```python
+CRONJOBS = [
+    ...
+    # remote connection checker. every 1 hour
+    ('0 */1 * * *', 'AndroidRequestsBackups.jobs.ssh_sftp_checker', '> /tmp/android_request_bkps_ssh_sftp_checker_log.txt'),
+    ...
+]
+```
+
+And remember to update your jobs:
+```(bash)
+sudo -u root python manage.py crontab remove
+sudo -u root python manage.py crontab add
+```
 
 
 ## Future Work
 
+- Automatically check whether `AndroidRequests` migrations are applied to (TranSappViz): add this to a test and send an email or add it to the load script. Also, the current (TranSapp) migrations registry can be sent and checked on (TranSappViz).
 - Decouple the postprocessing script call from the (TranSappViz) code (do not use a direct call to `transform.py`)
 - Consider migrating to a queue based architecture. See also: "ETL Queues" on google.
-
