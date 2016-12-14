@@ -3,23 +3,12 @@ from AndroidRequestsBackups import jobs
 from django.conf import settings
 import subprocess
 import os
+import unittest
 
-
+@unittest.skipIf(os.geteuid() != 0, "SKIP: This tests requires to the run as root")
 class AndroidRequestsBackupsTest(SimpleTestCase):
-    """
-    HINT:
-    These tests does not require the database to have a certain
-    state, so you can run them as follows (to avoid the database
-    setting up time):
-
-     > sudo -u root python manage.py test -k AndroidRequestsBackups
-
-    ... note the root impersonating code. It is required to be able to
-    performs some stuff, like pg_dump and database loads with sql.
-    """
-
+    
     def setUp(self):
-        """ set variables in settings.py to test commands """
         self.app_path = settings.BASE_DIR + "/AndroidRequestsBackups/"
 
     def tearDown(self):

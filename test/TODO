@@ -2,7 +2,7 @@
 listar tareas pendientes
 ////////////////////////////////
 
-0- coregir temas de travis
+0- (DONE) coregir temas de travis
 1- (DONE) mail a felipe en caso de falla de load o dump
 2- (DONE) test_remote a un cron, que envie mails a felipe.
 3- (DONE) test complete loaddata en remote
@@ -18,8 +18,8 @@ limitar cosas que alcanzo a hacer
 Sesiones restantes (de 4 hrs)
 1.- hoy: 1(OK), 2(OK), 7(OK)
 2.- jue: 1(OK), 2(OK),
-3.- vie: 0 + 3(OK) + 4(OK)
-4.- lun: 0 + 3(OK) + 4(OK)
+3.- vie: 0(OK) + 3(OK) + 4(OK)
+4.- lun: 0(OK) + 3(OK) + 4(OK)
 5.- mar: ENTREGA + 5 + 6
 6.- mie: Correcciones
 7.- jue: DEMO
@@ -35,3 +35,16 @@ Consideraciones:
 	- a quienes se mandan los emails
 	- como correr los jobs
 	- ej. aplicar migraciones a ambos modelos
+
+
+	"""
+    HINT:
+    These tests does not require the database to have a certain
+    state, so you can run them as follows (to avoid the database
+    setting up time):
+
+     > sudo -u root python manage.py test -k AndroidRequestsBackups
+
+    ... note the root impersonating code. It is required to be able to
+    performs some stuff, like pg_dump and database loads with sql.
+    """
