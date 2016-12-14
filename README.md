@@ -329,9 +329,9 @@ $ sudo -u root python manage.py test -k AndroidRequestsBackups
 
 #### Automated Job
 
-We also provide you a cronjob, so you can continuously check the connection state between both servers. The job will attempt to connect to the (TranSappViz) server from (TranSapp), and run a simple script through ssh and send a file through sftp.
+We also provide you a cronjob, so you can continuously check the connection state between both servers. The job will attempt to connect to the (TranSappViz) server from (TranSapp), run a simple script through ssh and send a file through sftp.
 
-This test was designed as a job to be able to have a quick feedback when the connectivity is lost, which means your visualization server will be outdated!. On failure, it will send an email to the server admins, the same as the other jobs.
+This test was designed as a job to be able to have a quick feedback when the connectivity is lost, which means your visualization server is outdated!. On failure, it will send an email to the admins, the same as the other jobs.
 
 This job should only run on the (TranSapp) server. Just add it to the CRONJOBS variable:
 
