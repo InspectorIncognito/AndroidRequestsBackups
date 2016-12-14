@@ -265,7 +265,7 @@ Also there is a test implemented as a cronjob, which will attempt to connect to 
 
 ### Prerequisites
 
-#### `settings.py`
+#### settings.py
 
 Some tests require you have properly set the following variables on settings.py file:
 
