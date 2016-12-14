@@ -16,6 +16,8 @@ The processing pipeline is as follows:
 
 Complete and partial backups only differ on the amount of data that is sent. Complete backups performs a complete database dump, but partial only take into account the latest M minutes of data and only from AndroidRequests models which might have changed.
 
+On failure, all backup jobs are configured to send an email to the server admins, as defined on the `ADMINS` variable, so this requires the `ADMIN` and `EMAIL_*` configurations on the `settings.py` file.
+
 
 ## Project Setup
 
@@ -76,23 +78,29 @@ For more information on git submodule usage, see [the official book](https://git
 
 ## Settings:
 
-Also, you each server requires the following configurations on the `settings.py` file.
+Also, each server requires the `ANDROID_REQUESTS_BACKUPS` dictionary to be set on the `settings.py` file. The contents of this variable depends on whether the server is (TranSapp) or (TranSappViz).
+
+To ease this process, we provide you a template file with the required configurations for each server. You can find them on `transapp_settings.template.py` (for TranSapp) and `transappviz_settings.template.py` (for TranSappViz). If you want to secure this values, you can copy the file to your `keys/` folder and call them like this:
+
+```python
+## load AndroidRequestsBackups settings
+from server.keys.android_requests_backups import ANDROID_REQUESTS_BACKUPS
+```
 
 ### On both servers
 
 ```python
-## (TranSappViz) related parameters
 # Folder (full path) where to put backups on remote (TranSappViz) server.
-# Any file older than ANDROID_REQUESTS_BACKUPS_BKPS_LIFETIME days
+# Any file older than ANDROID_REQUESTS_BACKUPS['BKPS_LIFETIME'] days
 # will be deleted!
 # This value MUST match the one on the other server!, otherwise
 # really bad stuff might happen
-ANDROID_REQUESTS_BACKUPS_REMOTE_BKP_FLDR = "/home/transapp/bkps"
+ANDROID_REQUESTS_BACKUPS['REMOTE_BKP_FLDR'] = "/home/username/bkps"
 
 # Amount of minutes to send to the remote (TranSappViz) server.
 # This value MUST match the one on the other server!, otherwise
 # some data can be lost
-ANDROID_REQUESTS_BACKUPS_TIME            = "5"
+ANDROID_REQUESTS_BACKUPS['TIME']            = "5"
 ```
 
 - The database name used to fetch and load data is taken from the `settings.DATABASES['default']['NAME']` variable.
@@ -101,20 +109,18 @@ ANDROID_REQUESTS_BACKUPS_TIME            = "5"
 ### On (TranSapp) server
 
 ```python
-## (TranSapp) related parameters
-# Folder to use for tmp processing (full path).
+# Folder to use for tmp processing on (TranSapp) (full path).
 # At some point, this folder can be completely deleted, so ensure
 # this is not something important!, like '/home' or '/'."
-ANDROID_REQUESTS_BACKUPS_TMP_BKP_FLDR    = "/tmp/backup_viz"
+ANDROID_REQUESTS_BACKUPS['TMP_BKP_FLDR']    = "/tmp/backup_viz"
 
-
-# remote (TranSappViz) server credentials.
+# Remote (TranSappViz) server credentials.
 # - private key: used to access the remote
-# - remote host: IP of the remote host
+# - remote host: remote host IP or hostname 
 # - remote user: username on the remote
-ANDROID_REQUESTS_BACKUPS_PRIVATE_KEY     = "/home/server/.ssh/id_rsa"
-ANDROID_REQUESTS_BACKUPS_REMOTE_HOST     = "104.236.183.105"
-ANDROID_REQUESTS_BACKUPS_REMOTE_USER     = "transapp"
+ANDROID_REQUESTS_BACKUPS['PRIVATE_KEY']     = "/home/username/.ssh/id_rsa"
+ANDROID_REQUESTS_BACKUPS['REMOTE_HOST']     = "200.0.183.101"
+ANDROID_REQUESTS_BACKUPS['REMOTE_USER']     = "username"
 ```
 
 
@@ -124,14 +130,21 @@ ANDROID_REQUESTS_BACKUPS_REMOTE_USER     = "transapp"
 # Amount of days to keep "complete backup" files. Older files are deleted.
 # This value is only valid for complete backups. Partial backups are only
 # kept for 1 day
-ANDROID_REQUESTS_BACKUPS_BKPS_LIFETIME   = "4"
+ANDROID_REQUESTS_BACKUPS['BKPS_LIFETIME']   = "4"
 ```
-
-
 
 ## Scheduling
 
-Backups needs to be scheduled on each `settings.py` file. The configuration depends on the working mode of each server. 
+Backups needs to be scheduled on each `settings.py` file. The configuration depends on the working mode of each server.
+
+As before, you can use the same template files to update the cronjobs configuration, this way you can manage all AndroidRequestsBackups configuration in one place:
+
+```python
+## load AndroidRequestsBackups jobs and update the current ones
+from server.keys.android_requests_backups import android_requests_backups_update_jobs
+CRONJOBS = android_requests_backups_update_jobs(CRONJOBS)
+```
+
 
 ### The sender (TranSapp)
 
@@ -152,7 +165,7 @@ CRONJOBS = [
 
 The recommended setting is to schedule a lot of update checkings, this way new updates are applied as soon as possible (it's super duper free to fail if there aren't updates, assuming you are not scheduling a check every second). 
 
-It is very important to keep the partial backup time interval AT MOST at a half of the `ANDROID_REQUESTS_BACKUPS_TIME` parameter, otherwise bkps will be stacked, which will result on a fixed update delay of `ANDROID_REQUESTS_BACKUPS_BKPS_LIFETIME` days (for complete bkps) or 2 days (for partial bkps).
+It is very important to keep the partial backup time interval AT MOST at a half of the `ANDROID_REQUESTS_BACKUPS['TIME']` parameter, otherwise bkps will be stacked, which will result on a fixed update delay of `ANDROID_REQUESTS_BACKUPS['BKPS_LIFETIME']` days (for complete bkps) or 2 days (for partial bkps).
 
 ```python
 # ONLY ON (TranSappViz)
@@ -160,7 +173,7 @@ CRONJOBS = [
     # check for complete updates every one hour
     ('0 */1 * * *', 'AndroidRequestsBackups.jobs.complete_loaddata', '> /tmp/android_request_bkps_complete_loaddata_log.txt')
     
-    # check for partial updates every 2 minutes
+    # check for partial updates every minute
     ('*/1 * * * *', 'AndroidRequestsBackups.jobs.partial_loaddata',  '> /tmp/android_request_bkps_partial_loaddata_log.txt')
 ]
 ```
@@ -168,7 +181,6 @@ CRONJOBS = [
 ### On both
 
 On each server, you can see the process logs on the `/tmp/android_request_bkps_*_log.txt` files.
-
 
 This app also requires to set the following `django-crontab` related parameters:
 
@@ -182,16 +194,16 @@ See also [this wiki](https://en.wikipedia.org/wiki/Cron#Format) on how to write 
 
 ### Considerations:
 
-Disk Space is a limited resource on Web Servers, so make sure not to fill them with garbage (i.e, backups). This can only happen on (TranSappViz), specially for complete backups, when they are scheduled to be run too often (like hours, minutes.) or when the `ANDROID_REQUESTS_BACKUPS_BKPS_LIFETIME` variable is too large.
+Disk Space is a limited resource on Web Servers, so make sure not to fill them with garbage (i.e, backups). This can only happen on (TranSappViz), specially for complete backups, when they are scheduled to be run too often (like hours, minutes.) or when the `ANDROID_REQUESTS_BACKUPS['BKPS_LIFETIME']` variable is too large.
 
-At the moment, (TranSappViz) has a 20GB disk, and each complete backup is ~50MB size .. so using a 10 days lifetime will give you a 500MB occupied disk space. 
+At the moment, (TranSappViz) has a 20GB disk, and each complete backup is ~50MB size .. so using a 10 days lifetime will give you a 500MB disk space usage. 
 
-If you somehow managed to fill the disk, then everything will die... YOU DO NOT WANT THIS TO HAPPEN!.. So please, be carefull.
+If somehow you managed to fill the disk, then everything will die... And you will have problems even when trying to connect by ssh to the server. YOU DO NOT WANT THIS TO HAPPEN!.. So please, be carefull.
 
 
 ## Finally, setting up the jobs
 
-This must be done with root privileges on both servers. On both (TranSapp) and (TranSappViz), we need to access the database as the postgres user to perform dumps and loads. Also, some (TranSapp) server files can only be modified by root.
+This must be done with root privileges on both servers. On both (TranSapp) and (TranSappViz), we need to access the database as the postgres user to perform dumps and loads. Also, some (TranSapp) server files can only be modified or read by root.
 
 So, we need to remove outdated jobs, and add the new ones. Open a terminal and type:
 ```(bash)
@@ -202,7 +214,7 @@ sudo -u root python manage.py crontab remove
 sudo -u root python manage.py crontab add
 ```
 
-You can check the all the jobs an user owns this way. Only make sure only the `root` owns the `AndroidRequestsBackups` jobs. Open a terminal and type:
+You can check the all the jobs an user owns this way. Just make sure only the `root` user owns the `AndroidRequestsBackups` jobs. Open a terminal and type:
 ```(bash)
 sudo -u <username> python manage.py crontab show
 
@@ -236,16 +248,16 @@ Some tests require you have properly set the following variables on settings.py 
 ```bash
 # user used to connect to localhost. Tipically this is yourself.
 # just call `$echo $USER` on a bash shell.
-ANDROID_REQUESTS_BACKUPS_THIS_USER_TEST      = "server"
+ANDROID_REQUESTS_BACKUPS['THIS_USER_TEST']      = "server"
 
 # full path to where place the testing junk. The files will be written onto
-# the ANDROID_REQUESTS_BACKUPS_THIS_USER_HOME_TEST/bkps/test folder.
-ANDROID_REQUESTS_BACKUPS_THIS_USER_HOME_TEST = "/home/server"
+# the ANDROID_REQUESTS_BACKUPS['THIS_USER_HOME_TEST']/bkps/test folder.
+ANDROID_REQUESTS_BACKUPS['THIS_USER_HOME_TEST'] = "/home/server"
 ```
 
 #### KEYS
 
-Tests assume your user (identified by the `ANDROID_REQUESTS_BACKUPS_PRIVATE_KEY` key file) is able to connect to the (TranSappViz) server and to localhost. 
+Tests assume your user (identified by the `ANDROID_REQUESTS_BACKUPS['PRIVATE_KEY']` key file) is able to connect to the (TranSappViz) server and to localhost. 
 
 In order to connect to localhost, you must add the related public key to the `~/.ssh/authorized_keys` registry:
 ```bash
@@ -263,7 +275,7 @@ $ ssh <your_user>@localhost -i ~/.ssh/id_rsa
 
 #### Permissions
 
-Also, make sure you have permissions to write to the `ANDROID_REQUESTS_BACKUPS_THIS_USER_HOME_TEST/bkps/test` folder, otherwise, almost every test will fail.
+Also, make sure you have permissions to write to the `ANDROID_REQUESTS_BACKUPS['THIS_USER_HOME_TEST']/bkps/test` folder, otherwise, almost every test will fail.
 ```bash
 $ ls -la      # check permissions
 $ sudo mkdir -p <folder>        # create it 
