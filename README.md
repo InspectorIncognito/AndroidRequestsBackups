@@ -18,6 +18,23 @@ Complete and partial backups only differ on the amount of data that is sent. Com
 
 On failure, all backup jobs are configured to send an email to the server admins, as defined on the `ADMINS` variable, so this requires the `ADMIN` and `EMAIL_*` configurations on the `settings.py` file.
 
+### Table of contents
+
+  * [Project Setup](#project-setup)
+  * [Settings](#settings)
+  	* [Common Settings](#on-both-servers)
+  	* [(TranSapp) only](#on-transapp-server)
+  	* [(TranSappViz) only](#on-transappviz-server)
+  * [Scheduling](#scheduling)
+  	* [(TranSapp) only](#the-sender-transapp)
+  	* [(TranSappViz) only](#the-receiver-transappviz)
+  	* [Common Settings](#on-both)
+  	* [Considerations](#considerations)
+  * [Jobs Usage](#finally-setting-up-the-jobs)
+  * [Testing](#testing)
+  * [Future Work](#future-work)
+
+
 
 ## Project Setup
 
