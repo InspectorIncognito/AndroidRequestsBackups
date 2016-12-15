@@ -26,7 +26,7 @@ fi
 ## dump to sql
 echo "- creating complete backup ..."
 cd "$TMP_BKP_FLDR"
-sudo -u postgres pg_dump "$DATABASE_NAME" --table='*ndroid*equests_*' > "$TMP_DB_DUMP_FULL"
+sudo -u postgres pg_dump "$DATABASE_NAME" --table='*ndroid*equests_*' --table='*django_migrations*' > "$TMP_DB_DUMP_FULL"
 if [ ! -e "$TMP_DB_DUMP_FULL" ]; then
 	echo "UPS!.. The db dump file was not found. Maybe, the pg_dump command failed!."
 	echo "Required file: $TMP_DB_DUMP_FULL"
