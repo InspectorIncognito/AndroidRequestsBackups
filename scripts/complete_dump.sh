@@ -13,7 +13,7 @@ TMP_DB_DUMP_FULL="$TMP_BKP_FLDR"/"$TMP_DB_DUMP"
 ## compress all images
 echo "- creating reports images backup"
 cd "$IMGS_FLDR"
-tar -zcf "$TMP_BKP_IMGS_FULL" *
+tar -zcf "$TMP_BKP_IMGS_FULL" *.jpeg
 if [ ! -e "$TMP_BKP_IMGS_FULL" ]; then
 	echo " - image backup file not found, but it should exists!: $TMP_BKP_IMGS_FULL"
 	exit 1
@@ -25,7 +25,7 @@ fi
 ## compress migrations files
 echo "- creating migrations backup"
 cd "$MIGRATION_FLDR"
-tar -zcf "$TMP_BKP_MIGRATION_FULL" *
+tar -zcf "$TMP_BKP_MIGRATION_FULL" *.py
 if [ ! -e "$TMP_BKP_MIGRATION_FULL" ]; then
 	echo " - migration backup file not found, but it should exists!: $TMP_BKP_MIGRATION_FULL"
 	exit 1

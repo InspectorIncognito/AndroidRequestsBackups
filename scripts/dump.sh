@@ -132,7 +132,6 @@ if [ "$BKP_TYPE" = "partial" ] ; then
 fi
 echo "  > PARTIAL_BKP_TIME: $PARTIAL_BKP_TIME"
 
-MIGRATION_FLDR="$SERVER_FLDR/AndroidRequests/migrations"
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### GENERATED PARAMETERS
@@ -140,7 +139,7 @@ MIGRATION_FLDR="$SERVER_FLDR/AndroidRequests/migrations"
 
 
 VIZ_APP_FLDR="$SERVER_FLDR/AndroidRequestsBackups"
-
+MIGRATION_FLDR="$SERVER_FLDR/AndroidRequests/migrations"
 TMP_BKP_FLDR="$TMP_BKP_FLDR"/"$BKP_TYPE"
 REMOTE_BKP_FLDR="$REMOTE_BKP_FLDR"/"$BKP_TYPE"
 
@@ -174,7 +173,8 @@ echo "  > VIZ_APP_FLDR: $VIZ_APP_FLDR"
 echo "  > TMP_BKP_DB_FULL: $TMP_BKP_DB_FULL"
 echo "  > TMP_BKP_IMGS_FULL: $TMP_BKP_IMGS_FULL"
 echo "  > TMP_BKP_FILE_FULL: $TMP_BKP_FILE_FULL"
-
+echo "  > MIGRATION_FLDR: $MIGRATION_FLDR"
+echo "  > TMP_BKP_MIGRATION_FULL: $TMP_BKP_MIGRATION_FULL"
 
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
@@ -196,6 +196,15 @@ if [ ! -r "$IMGS_FLDR" ]; then
 	echo " - server images folder exists, but is not readable: $IMGS_FLDR"
 	exit 1
 fi
+if [ ! -d "$MIGRATION_FLDR" ]; then
+	echo " - AndroidRequests migrations folder not found at: $MIGRATION_FLDR"
+	exit 1
+fi
+if [ ! -r "$MIGRATION_FLDR" ]; then
+        echo " - AndroidRequests migrations folder exists but is not readable: $MIGRATION_FLDR"
+	exit 1
+fi
+
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### PREPARATION
@@ -246,7 +255,7 @@ echo "'ifconfig' output: " >> "$TMP_METADATA_BACKUP"
 
 cd "$TMP_BKP_FLDR"
 if [ "$BKP_TYPE" = "complete" ] ; then
-	tar -zcf "$TMP_BKP_FILE" "$TMP_DB_BACKUP" "$TMP_IMG_BACKUP" "$TMP_METADATA_BACKUP" $"TMP_MIGRATION_BACKUP"
+	tar -zcf "$TMP_BKP_FILE" "$TMP_DB_BACKUP" "$TMP_IMG_BACKUP" "$TMP_METADATA_BACKUP" "$TMP_MIGRATION_BACKUP"
 else
 	tar -zcf "$TMP_BKP_FILE" "$TMP_DB_BACKUP" "$TMP_IMG_BACKUP" "$TMP_METADATA_BACKUP" 	
 fi
