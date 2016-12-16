@@ -18,7 +18,8 @@ ANDROID_REQUESTS_BACKUPS = {
 	# really bad stuff might happen
 	'REMOTE_BKP_FLDR' : '/home/username/bkps',
 
-	# Amount of minutes to send to the remote (TranSappViz) server.
+	# Amount of data measured on minutes to send to the remote (TranSappViz)
+	# server, i.e, modified data since (now - ANDROID_REQUESTS_BACKUPS['TIME']).
 	# This value MUST match the one on the other server!, otherwise
 	# some data can be lost
 	'TIME'            : 5,
