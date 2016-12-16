@@ -1,10 +1,20 @@
 #!/bin/bash
 
+cd "$BACKUP_FOLDER"/tmp
 
-cd "$BACKUP_FOLDER"
-cd tmp/db
+# check migrations where sent
+if [ ! -e "$TMP_MIGRATION_BACKUP" ]; then
+        echo "Backup file for migrations was not found: $TMP_IMG_BACKUP" 
+        exit_and_free
+fi
+
+echo " - extracting migrations: $BACKUP_FOLDER/tmp/migrations" 
+mkdir -p migrations && cd migrations
+tar -zxf ../"$TMP_MIGRATION_BACKUP"
+
 
 # check dump
+cd "$BACKUP_FOLDER"/tmp/db
 echo " - checking for JSON dump"
 if [ ! -e database.sql ]; then
 	echo "database.sql not found." 

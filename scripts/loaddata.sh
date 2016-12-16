@@ -181,6 +181,18 @@ if [ ! -w "$IMGS_FLDR" ]; then
 	exit 1
 fi
 
+mkdir -p "$MIGRATION_FLDR"
+if [ ! -d "$MIGRATION_FLDR" ]; then
+        echo "Destination folder for copying AndroidRequests migrations not found: $MIGRATION_FLDR"
+        exit 1
+fi
+if [ ! -w "$MIGRATION_FLDR" ]; then
+        echo "Destination folder for for AndroidRequests migrations exists, but is not writable: $MIGRATION_FLDR"
+        exit 1
+fi
+
+
+
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### MUTEX
 #### #### #### #### #### #### #### #### #### #### #### #### #### ####
