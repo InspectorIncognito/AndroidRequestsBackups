@@ -141,7 +141,7 @@ ANDROID_REQUESTS_BACKUPS['TMP_BKP_FLDR']    = "/tmp/backup_viz"
 # - remote host: remote host IP or hostname 
 # - remote user: username on the remote
 ANDROID_REQUESTS_BACKUPS['PRIVATE_KEY']     = "/home/username/.ssh/id_rsa"
-ANDROID_REQUESTS_BACKUPS['REMOTE_HOST']     = "200.0.183.101"
+ANDROID_REQUESTS_BACKUPS['REMOTE_HOST']     = "0.0.0.0"
 ANDROID_REQUESTS_BACKUPS['REMOTE_USER']     = "username"
 ```
 
