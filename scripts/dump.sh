@@ -132,6 +132,7 @@ if [ "$BKP_TYPE" = "partial" ] ; then
 fi
 echo "  > PARTIAL_BKP_TIME: $PARTIAL_BKP_TIME"
 
+MIGRATION_FLDR="$SERVER_FLDR/AndroidRequests/migrations"
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### GENERATED PARAMETERS
@@ -146,6 +147,7 @@ REMOTE_BKP_FLDR="$REMOTE_BKP_FLDR"/"$BKP_TYPE"
 ## backup files
 TMP_IMG_BACKUP=images.tar.gz
 TMP_DB_BACKUP=database.tar.gz
+TMP_MIGRATION_BACKUP=migrations.tar.gz
 TMP_BKP_FILE="NEW_backup_$(date +%Y-%m-%d__%H_%M_%S).tar.gz"
 
 # for ssh 
@@ -158,7 +160,7 @@ SFTP_COMMANDS="$TMP_BKP_FLDR"/sftp_commands.txt
 export TMP_BKP_DB_FULL="$TMP_BKP_FLDR"/"$TMP_DB_BACKUP"
 export TMP_BKP_IMGS_FULL="$TMP_BKP_FLDR"/"$TMP_IMG_BACKUP"
 export TMP_BKP_FILE_FULL="$TMP_BKP_FLDR/$TMP_BKP_FILE"
-
+export TMP_BKP_MIGRATION_FULL="$TMP_BKP_FLDR"/"$TMP_MIGRATION_BACKUP"
 
 echo " - computed variables:"
 echo "  > TMP_BKP_FLDR: $TMP_BKP_FLDR"
@@ -243,7 +245,12 @@ echo "'ifconfig' output: " >> "$TMP_METADATA_BACKUP"
 #### ----- ----- ----- ----- ----- ----- ----- ----- -----
 
 cd "$TMP_BKP_FLDR"
-tar -zcf "$TMP_BKP_FILE" "$TMP_DB_BACKUP" "$TMP_IMG_BACKUP" "$TMP_METADATA_BACKUP"
+if [ "$BKP_TYPE" = "complete" ] ; then
+	tar -zcf "$TMP_BKP_FILE" "$TMP_DB_BACKUP" "$TMP_IMG_BACKUP" "$TMP_METADATA_BACKUP" $"TMP_MIGRATION_BACKUP"
+else
+	tar -zcf "$TMP_BKP_FILE" "$TMP_DB_BACKUP" "$TMP_IMG_BACKUP" "$TMP_METADATA_BACKUP" 	
+fi
+
 if [ ! -e "$TMP_BKP_FILE" ]; then
 	echo "UPS!.. The backup file was not found. Something went wrong while compressing the files"
 	exit 1

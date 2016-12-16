@@ -19,6 +19,17 @@ if [ ! -e "$TMP_BKP_IMGS_FULL" ]; then
 	exit 1
 fi
 
+#### create migrations backup
+#### ----- ----- ----- ----- ----- ----- ----- ----- -----
+
+## compress migrations files
+echo "- creating migrations backup"
+cd "$MIGRATION_FLDR"
+tar -zcf "$TMP_BKP_MIGRATION_FULL" *
+if [ ! -e "$TMP_BKP_MIGRATION_FULL" ]; then
+	echo " - migration backup file not found, but it should exists!: $TMP_BKP_MIGRATION_FULL"
+	exit 1
+fi
 
 #### create database backup
 #### ----- ----- ----- ----- ----- ----- ----- ----- -----

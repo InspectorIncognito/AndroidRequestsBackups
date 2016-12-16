@@ -29,3 +29,13 @@ if [ "$(ls -A imgs/)" ]; then
 else
     echo " - no images found"
 fi
+
+# copy migrations
+echo " - copying migrations from $BACKUP_FOLDER/tmp/migrations to $MIGRATION_FLDR" 
+cd "$BACKUP_FOLDER"
+cd tmp
+if [ "$(ls -A migrations/)" ]; then
+    cp -arn migrations/* "$MIGRATION_FLDR"
+else
+    echo " - no migrations found"
+fi

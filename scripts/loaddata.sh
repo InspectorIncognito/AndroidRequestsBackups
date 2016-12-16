@@ -117,11 +117,13 @@ echo "  > PARTIAL_BKP_TIME: $PARTIAL_BKP_TIME"
 
 MUTEX_FOLDER="$BACKUP_FOLDER"/lockFolder.lock
 BACKUP_FOLDER="$BACKUP_FOLDER"/"$BKP_TYPE"
+MIGRATION_FLDR="$SERVER_FLDR/AndroidRequests/migrations"
 
 # bkp files
 TMP_DB_DUMP=database.sql
 TMP_IMG_BACKUP=images.tar.gz
 TMP_DB_BACKUP=database.tar.gz
+TMP_MIGRATION_BACKUP=migrations.tar.gz
 
 
 THIS_APP_FLDR="$SERVER_FLDR/AndroidRequestsBackups"
