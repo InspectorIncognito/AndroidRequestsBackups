@@ -141,7 +141,7 @@ ANDROID_REQUESTS_BACKUPS['TMP_BKP_FLDR']    = "/tmp/backup_viz"
 # - private key: used to access the remote
 # - remote host: remote host IP or hostname 
 # - remote user: username on the remote
-ANDROID_REQUESTS_BACKUPS['PRIVATE_KEY']     = "/home/username/.ssh/id_rsa"
+ANDROID_REQUESTS_BACKUPS['PRIVATE_KEY']     = "/root/.ssh/id_rsa"
 ANDROID_REQUESTS_BACKUPS['REMOTE_HOST']     = "0.0.0.0"
 ANDROID_REQUESTS_BACKUPS['REMOTE_USER']     = "username"
 ```
@@ -272,7 +272,8 @@ Some tests require you have properly set the following variables on settings.py 
 
 ```bash
 # user used to connect to localhost. Tipically this is yourself.
-# just call `$echo $USER` on a bash shell.
+# just call `$echo $USER` on a bash shell. Try not to use the root user,
+# as on any bug, you can mess your server!.
 ANDROID_REQUESTS_BACKUPS['TEST_USER']      = "username"
 
 # full path to where to place the testing junk. Files will be written onto
@@ -282,25 +283,28 @@ ANDROID_REQUESTS_BACKUPS['TEST_USER_HOME'] = "/home/username"
 
 #### KEYS
 
-Tests assume your user (identified by the `ANDROID_REQUESTS_BACKUPS['PRIVATE_KEY']` key file) is able to connect to the (TranSappViz) server and to localhost. 
+Tests require to perform a ssh connection from `root@localhost` to `<username>@localhost`. 
 
-In order to connect to localhost, you must add the related public key to the `~/.ssh/authorized_keys` registry:
+Thus, you will need to generate a public and private keys for root:
 ```bash
-$ cd
-$ cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-$ cat ~/.ssh/authorized_keys  # obs: make sure the key was be pasted on a new
-                              # line!, so you not break the registry.
+## connected as root
+# rsa encription, no passphrase, filename
+$ ssh-keygen -t rsa -N "" -f "/root/.ssh/id_rsa"
+```
+
+Then add the generated public key to the server user authorized keys registry:
+```bash
+## connected as root
+$ cat /root/.ssh/id_rsa.pub >> /home/username/.ssh/authorized_keys
+$ cat /home/username/.ssh/authorized_keys  # obs: make sure the key was be pasted on a new
+                                           # line!, so you has not break the registry.
 ```
 
 Also, this key must be used at least once!, to prevent raising a shell prompt asking whether you want to add your own fingerprint. 
 ```bash
+## connected as root
 # Just try a ssh localhost connection and accept when prompted:
-$ ssh <your_user>@localhost -i ~/.ssh/id_rsa
-
-or 
-
-# Add your own key to your known hosts
-$ ssh-keyscan -H localhost >> $HOME/.ssh/known_hosts
+$ ssh username@localhost -i /root/.ssh/id_rsa
 ```
 
 
