@@ -27,7 +27,7 @@ ANDROID_REQUESTS_BACKUPS = {
 	# - private key: used to access the remote
 	# - remote host: IP of the remote host
 	# - remote user: username on the remote
-	'PRIVATE_KEY'     : '/home/username/.ssh/id_rsa',
+	'PRIVATE_KEY'     : '/root/.ssh/id_rsa',
 	'REMOTE_HOST'     : '0.0.0.0',
 	'REMOTE_USER'     : 'username',
 
