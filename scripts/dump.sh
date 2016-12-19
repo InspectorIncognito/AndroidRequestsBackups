@@ -296,7 +296,10 @@ echo "put $TMP_BKP_FILE_FULL" >> "$SFTP_COMMANDS"
 ## send
 echo "- sending file"
 sftp -p -i "$PRIVATE_KEY" -b "$SFTP_COMMANDS" "$REMOTE_USERHOST"
-
+if [ $? -ne 0 ]; then
+	echo "sftp exited with status not 0. There was an error while sending the backup file."
+	exit 1
+fi
 
 #### delete backups on this server
 #### ----- ----- ----- ----- ----- ----- ----- ----- -----
