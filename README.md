@@ -127,7 +127,7 @@ ANDROID_REQUESTS_BACKUPS['TIME']            = 5
 ```
 
 - The database name used to fetch and load data is taken from the `settings.DATABASES['default']['NAME']` variable.
-- Images to send are retrieved from the `settings.MEDIA_IMAGE` folder.
+- Images to send are retrieved from the `settings.MEDIA_IMAGE` folder. Only files with `.jpeg` extension are considered.
 
 ### On (TranSapp) server
 
