@@ -80,7 +80,7 @@ done < "bkp/dump_report_images.txt"
 ## compress image folder
 echo "- creating reports images backup"
 cd imgs
-tar -zcf "$TMP_BKP_IMGS_FULL" *
+tar -zcf "$TMP_BKP_IMGS_FULL" *.jpeg
 if [ ! -e "$TMP_BKP_IMGS_FULL" ]; then
 	echo " - image backup file not found, but it should exists!: $TMP_BKP_IMGS_FULL"
 	exit 1
