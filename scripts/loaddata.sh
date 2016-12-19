@@ -107,8 +107,8 @@ if [ "$BKP_TYPE" = "partial" ] ; then
 	   echo "PARTIAL_BKP_TIME must be a positive integer. given: $PARTIAL_BKP_TIME"
 	   exit 1
 	fi
+	echo "  > PARTIAL_BKP_TIME: $PARTIAL_BKP_TIME"
 fi
-echo "  > PARTIAL_BKP_TIME: $PARTIAL_BKP_TIME"
 
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
@@ -149,8 +149,11 @@ echo " - checking the required stuff works"
 
 # backup folder with type
 if [ ! -d "$BACKUP_FOLDER" ]; then
-	echo "Backup folder not found for $BKP_TYPE backups: $BACKUP_FOLDER"
-	exit 1
+	echo "///////////////////////////////////////////////////////"
+	echo "WARNING: Backup folder not found for $BKP_TYPE backups: $BACKUP_FOLDER"
+	echo "Maybe, you have not sent your first backup"
+	echo "///////////////////////////////////////////////////////"
+	exit 0
 fi
 
 ## manage.py existence
