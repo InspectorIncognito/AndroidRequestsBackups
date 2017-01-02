@@ -43,7 +43,7 @@ def android_requests_backups_update_jobs(cronjobs):
 
 	# check for partial updates every minute
 	cronjobs.append(
-		('*/1 * * * *', 'AndroidRequestsBackups.jobs.partial_loaddata',
+		('2-58/1 * * * *', 'AndroidRequestsBackups.jobs.partial_loaddata',
 		'> /tmp/android_request_bkps_partial_loaddata_log.txt')
 	)
 
