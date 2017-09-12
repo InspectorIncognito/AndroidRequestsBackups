@@ -88,7 +88,11 @@ def _retrieve_dump_params():
                 settings.ANDROID_REQUESTS_BACKUPS['PRIVATE_KEY'],
                 settings.ANDROID_REQUESTS_BACKUPS['TMP_BKP_FLDR'],
                 settings.MEDIA_IMAGE,
-                settings.DATABASES['default']['NAME']
+                settings.DATABASES['default']['NAME'],
+                settings.DATABASES['default']['USER'],
+                settings.DATABASES['default']['PASSSWORD'],
+                settings.DATABASES['default']['HOST'],
+                settings.DATABASES['default']['PORT']
             ]
         )
         return element

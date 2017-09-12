@@ -102,7 +102,39 @@ if [ -z "$DATABASE_NAME" ]; then
 fi
 echo "  > DATABASE_NAME: $DATABASE_NAME"
 
-BKP_TYPE="$9"
+DATABASE_USER="$9"
+if [ -z "$DATABASE_USER" ]; then
+	echo "This script must be called with the DATABASE_USER parameter"
+	echo "DATABASE_USER represents the database user, duh."
+	exit 1
+fi
+echo "  > DATABASE_USER: $DATABASE_USER"
+
+DATABASE_PASSWORD="${10}"
+if [ -z "$DATABASE_PASSWORD" ]; then
+	echo "This script must be called with the DATABASE_PASSWORD parameter"
+	echo "DATABASE_PASSWORD represents the database password, duh."
+	exit 1
+fi
+echo "  > DATABASE_PASSWORD: $DATABASE_PASSWORD"
+
+DATABASE_HOST="${11}"
+if [ -z "$DATABASE_HOST" ]; then
+	echo "This script must be called with the DATABASE_HOST parameter"
+	echo "DATABASE_HOST represents the database host, duh."
+	exit 1
+fi
+echo "  > DATABASE_HOST: $DATABASE_HOST"
+
+DATABASE_PORT="${12}"
+if [ -z "$DATABASE_PORT" ]; then
+	echo "This script must be called with the DATABASE_PORT parameter"
+	echo "DATABASE_PORT represents the database port, duh."
+	exit 1
+fi
+echo "  > DATABASE_PORT: $DATABASE_PORT"
+
+BKP_TYPE="${13}"
 if [ -z "$BKP_TYPE" ]; then
 	echo "This script must be called with the BKP_TYPE parameter"
 	echo "BKP_TYPE represents the backup type: 'complete' or 'partial'"
@@ -114,7 +146,7 @@ if [ "$BKP_TYPE" != "complete" ] && [ "$BKP_TYPE" != "partial" ] ; then
 fi
 echo "  > BKP_TYPE: $BKP_TYPE"
 
-PARTIAL_BKP_TIME="${10}"
+PARTIAL_BKP_TIME="${14}"
 if [ "$BKP_TYPE" = "partial" ] ; then
 	if [ -z "$PARTIAL_BKP_TIME" ] ; then
 		echo "This script must be called with the PARTIAL_BKP_TIME parameter"
