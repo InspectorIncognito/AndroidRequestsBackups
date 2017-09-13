@@ -86,7 +86,7 @@ Whenever you want to update your repository submodules, simply update all stuff:
 ```bash
 $ cd <server_repo>
 
-# dowload your repo changes
+# download your repo changes
 $ git fetch
 $ git merge origin/master
 
@@ -146,6 +146,11 @@ ANDROID_REQUESTS_BACKUPS['REMOTE_HOST']     = "0.0.0.0"
 ANDROID_REQUESTS_BACKUPS['REMOTE_USER']     = "username"
 ```
 
+- Additionally, you need to create `.pgpass` file to save database password and then using with pg_dump command. This have to do in root home folder because is that user exects pg_dump
+
+```bash
+#hostname:port:database:username:password
+```
 
 ### On (TranSappViz) server
 
