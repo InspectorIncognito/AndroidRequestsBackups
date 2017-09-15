@@ -110,15 +110,7 @@ if [ -z "$DATABASE_USER" ]; then
 fi
 echo "  > DATABASE_USER: $DATABASE_USER"
 
-DATABASE_PASSWORD="${10}"
-if [ -z "$DATABASE_PASSWORD" ]; then
-	echo "This script must be called with the DATABASE_PASSWORD parameter"
-	echo "DATABASE_PASSWORD represents the database password, duh."
-	exit 1
-fi
-echo "  > DATABASE_PASSWORD: $DATABASE_PASSWORD"
-
-DATABASE_HOST="${11}"
+DATABASE_HOST="${10}"
 if [ -z "$DATABASE_HOST" ]; then
 	echo "This script must be called with the DATABASE_HOST parameter"
 	echo "DATABASE_HOST represents the database host, duh."
@@ -126,7 +118,7 @@ if [ -z "$DATABASE_HOST" ]; then
 fi
 echo "  > DATABASE_HOST: $DATABASE_HOST"
 
-DATABASE_PORT="${12}"
+DATABASE_PORT="${11}"
 if [ -z "$DATABASE_PORT" ]; then
 	echo "This script must be called with the DATABASE_PORT parameter"
 	echo "DATABASE_PORT represents the database port, duh."
@@ -134,7 +126,7 @@ if [ -z "$DATABASE_PORT" ]; then
 fi
 echo "  > DATABASE_PORT: $DATABASE_PORT"
 
-BKP_TYPE="${13}"
+BKP_TYPE="${12}"
 if [ -z "$BKP_TYPE" ]; then
 	echo "This script must be called with the BKP_TYPE parameter"
 	echo "BKP_TYPE represents the backup type: 'complete' or 'partial'"

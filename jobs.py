@@ -90,7 +90,6 @@ def _retrieve_dump_params():
                 settings.MEDIA_IMAGE,
                 settings.DATABASES['default']['NAME'],
                 settings.DATABASES['default']['USER'],
-                settings.DATABASES['default']['PASSWORD'],
                 settings.DATABASES['default']['HOST'],
                 settings.DATABASES['default']['PORT']
             ]
