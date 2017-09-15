@@ -138,7 +138,7 @@ if [ "$BKP_TYPE" != "complete" ] && [ "$BKP_TYPE" != "partial" ] ; then
 fi
 echo "  > BKP_TYPE: $BKP_TYPE"
 
-PARTIAL_BKP_TIME="${14}"
+PARTIAL_BKP_TIME="${13}"
 if [ "$BKP_TYPE" = "partial" ] ; then
 	if [ -z "$PARTIAL_BKP_TIME" ] ; then
 		echo "This script must be called with the PARTIAL_BKP_TIME parameter"
